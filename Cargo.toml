@@ -1,0 +1,7 @@
+[package]
+name = "glnvim"
+version = "0.1.0"
+authors = ["Chen Mulong <chenmulong@gmail.com>"]
+edition = "2018"
+
+[dependencies]
