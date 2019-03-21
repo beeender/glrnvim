@@ -7,6 +7,7 @@ use quale::which;
 
 const ALACRITTY_NAME: &str = "alacritty";
 const NVIM_NAME: &str = "nvim";
+const VERSION: &str = "0.1.0";
 
 fn check_alacritty() {
     let r = which(ALACRITTY_NAME);
@@ -37,12 +38,27 @@ fn parse_args() -> Vec<String> {
         if arg.starts_with("-h") || arg.starts_with("--help") {
             show_help();
             std::process::exit(0);
+        } else if arg.starts_with("-v") || arg.starts_with("--version") {
+            show_version();
+            std::process::exit(0);
         } else {
             n_args.push(arg.clone());
         }
     }
 
     return n_args;
+}
+
+fn show_version() {
+    let n_ver_out = Command::new("nvim")
+        .arg("-v")
+        .output()
+        .expect("You have to install a proper nvim.");;
+    if !n_ver_out.status.success()  {
+        std::process::exit(-1);
+    }
+    println!("glrnvim {}\n", VERSION);
+    println!("{}", String::from_utf8_lossy(&n_ver_out.stdout));
 }
 
 fn show_help() {
