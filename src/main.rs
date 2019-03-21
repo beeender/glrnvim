@@ -92,6 +92,9 @@ fn show_help() {
     for line in help {
         println!("{}", line);
     }
+
+    println!("\nConfig file: $HOME/.config/glrnvim.yml");
+    println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
 }
 
 fn main() {
