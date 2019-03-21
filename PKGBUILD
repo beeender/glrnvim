@@ -1,3 +1,4 @@
+# Maintainer: beeender <chenmulong@gmail.com>
 pkgname=('glrnvim')
 _pkgname="glrnvim"
 pkgver=0.1.0
