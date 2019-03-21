@@ -6,7 +6,7 @@ arch=('x86_64' 'i686')
 url='https://github.com/beeender/glrnvim'
 license=('GPL3')
 makedepends=('rust' 'cargo' 'git')
-source=('git+https://github.com/beeender/glrnvim.git#branch=master')
+source=("git+https://github.com/beeender/glrnvim.git#tag=v$pkgver")
 sha256sums=('SKIP')
 
 package_glrnvim() {
@@ -17,7 +17,7 @@ package_glrnvim() {
 	cd "$srcdir/$_pkgname"
 	env CARGO_INCREMENTAL=0 cargo build --release
 
-	install -D -m755 "$srcdir/$_pkgname/target/release/glrnvim" "$pkgdir/usr/bin/glrnvim"
+	install -Dm755 "$srcdir/$_pkgname/target/release/glrnvim" "$pkgdir/usr/bin/glrnvim"
     install -Dm644 $srcdir/$_pkgname/glrnvim.desktop "$pkgdir/usr/share/applications/glrnvim.desktop"
     install -Dm644 $srcdir/$_pkgname/glrnvim.svg "$pkgdir/usr/share/icons/glrnvim.svg"
 }
