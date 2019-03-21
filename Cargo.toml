@@ -1,7 +1,9 @@
 [package]
-name = "glnvim"
+name = "glrnvim"
 version = "0.1.0"
-authors = ["Chen Mulong <chenmulong@gmail.com>"]
+authors = ["beeender <chenmulong@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+quale = "1.0.0"
+dirs = "1.0"
