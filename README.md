@@ -11,7 +11,7 @@ See the speed from the screenshot:
 
 ## About
 
-glrnvim combines Open**GL**, **R**ust and **N**eo**VIM** together, to make the fastest, simplist neovim GUI.
+glrnvim combines Open**GL**, **R**ust and **N**eo**VIM** together, to make the fastest, simplest neovim GUI.
 
 ## Requisites
 
