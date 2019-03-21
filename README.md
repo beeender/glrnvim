@@ -6,6 +6,9 @@ A GPU-accelerated neovim GUI.
 
 glrnvim is the fastest neovim gui in existence. Using the GPU for rendering enables optimizations that simply aren't possible without it.
 
+See the speed from the screenshot:
+![screenshot](screenshot/very_fast.gif)
+
 ## About
 
 glrnvim combines Open**GL**, **R**ust and **N**eo**VIM** together, to make the fastest, simplist neovim GUI.
