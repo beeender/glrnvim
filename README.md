@@ -1,5 +1,6 @@
 glrnvim
 =======
+[![Build Status](https://travis-ci.com/beeender/glrnvim.svg?branch=master)](https://travis-ci.com/beeender/glrnvim)
 
 A GPU-accelerated neovim GUI.
 
