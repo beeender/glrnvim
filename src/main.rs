@@ -7,7 +7,7 @@ use quale::which;
 
 const ALACRITTY_NAME: &str = "alacritty";
 const NVIM_NAME: &str = "nvim";
-const VERSION: &str = "0.1.0";
+const VERSION: &str = "0.1.1";
 
 struct Config {
     fork: bool,
