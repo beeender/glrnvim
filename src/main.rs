@@ -9,6 +9,10 @@ const ALACRITTY_NAME: &str = "alacritty";
 const NVIM_NAME: &str = "nvim";
 const VERSION: &str = "0.1.0";
 
+struct Config {
+    fork: bool,
+}
+
 fn check_alacritty() {
     let r = which(ALACRITTY_NAME);
     if r == None {
@@ -25,13 +29,10 @@ fn check_nvim() {
     }
 }
 
-fn parse_args() -> Vec<String> {
+fn parse_args() -> (Option<Config>, Vec<String>) {
     let args: Vec<String> = env::args().collect();
     let mut n_args: Vec<String> = Vec::new();
-
-    if args.len() == 1 {
-        return n_args;
-    }
+    let mut fork: bool = true;
 
     for i in 1..args.len() {
         let arg = &args[i];
@@ -41,12 +42,14 @@ fn parse_args() -> Vec<String> {
         } else if arg.starts_with("-v") || arg.starts_with("--version") {
             show_version();
             std::process::exit(0);
+        } else if arg == "--nofork" {
+            fork = false;
         } else {
             n_args.push(arg.clone());
         }
     }
-
-    return n_args;
+    let config = Config {fork};
+    return (Some(config), n_args);
 }
 
 fn show_version() {
@@ -100,8 +103,8 @@ fn show_help() {
 fn main() {
     check_alacritty();
     check_nvim();
-    let n_args = parse_args();
-
+    let (config, n_args)= parse_args();
+    assert!(config.is_some());
     let config_dir = dirs::config_dir();
 
     let mut command = Command::new(ALACRITTY_NAME);
@@ -129,9 +132,12 @@ fn main() {
         command.arg(n_arg);
     }
 
-    let result = command.spawn();
-    if result.is_err() {
-        std::process::exit(-1);
+    let mut child = command.spawn().unwrap();
+    if config.unwrap().fork {
+        std::process::exit(0);
+    } else {
+        let _result = child.wait().unwrap();
+        std::process::exit(_result.code().unwrap_or(-1));
     }
 }
 
