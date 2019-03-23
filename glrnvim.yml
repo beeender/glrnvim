@@ -1,3 +1,6 @@
+# When I say Alacritty below, I actually mean glrnvim.
+# When I say terminal emulator below, I actually mean neovim GUI.
+
 # Configuration for Alacritty, the GPU enhanced terminal emulator.
 
 # Any items in the `env` entry below will be added as
