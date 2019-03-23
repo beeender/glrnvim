@@ -82,9 +82,10 @@ fn show_help() {
     help.push("Usage:".to_string());
     for line in lines {
         if line.starts_with("Usage:") {
-        } else if line.starts_with("Options") {
+        } else if line.starts_with("Options:") {
             option_passed = true;
             help.push(line.to_string());
+            help.push("  --nofork              Do not fork when starting GUI".to_string());
         } else if !option_passed {
             help.push(line.replace("nvim", "glrnvim"));
         } else {
