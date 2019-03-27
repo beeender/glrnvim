@@ -1,9 +1,10 @@
 extern crate quale;
 extern crate dirs;
 
-use std::env;
 use std::process::Command;
 use quale::which;
+use std::path::{PathBuf, Path};
+use std::env;
 
 const ALACRITTY_NAME: &str = "alacritty";
 const NVIM_NAME: &str = "nvim";
@@ -13,12 +14,45 @@ struct Config {
     fork: bool,
 }
 
-fn check_alacritty() {
+#[cfg(not(target_os = "macos"))]
+fn check_alacritty() -> PathBuf {
     let r = which(ALACRITTY_NAME);
     if r == None {
         eprintln!("'alacritty' executable cannot be found.");
         std::process::exit(-1);
     }
+    return r.unwrap();
+}
+
+#[cfg(target_os = "macos")]
+fn check_alacritty() -> PathBuf {
+    let r = which(ALACRITTY_NAME);
+    if r.is_some() {
+        return r.unwrap();
+    }
+
+    {
+        let app_path = Path::new("/Applications/Alacritty.app/Contents/MacOS/");
+        let exe_path = app_path.join(ALACRITTY_NAME);
+        if exe_path.exists() && exe_path.is_file() {
+            return exe_path;
+        }
+    }
+
+    {
+        match dirs::home_dir() {
+            None => {}
+            Some(home) => {
+                let exe_path = home.join("Alacritty.app/Contents/MacOS/").join(ALACRITTY_NAME);
+                if exe_path.exists() && exe_path.is_file() {
+                    return exe_path;
+                }
+            }
+        }
+    }
+
+    eprintln!("'alacritty' executable cannot be found.");
+    std::process::exit(-1);
 }
 
 fn check_nvim() {
@@ -102,13 +136,13 @@ fn show_help() {
 }
 
 fn main() {
-    check_alacritty();
+    let alacritty_exe = check_alacritty();
     check_nvim();
     let (config, n_args)= parse_args();
     assert!(config.is_some());
     let config_dir = dirs::config_dir();
 
-    let mut command = Command::new(ALACRITTY_NAME);
+    let mut command = Command::new(alacritty_exe);
     match config_dir {
         Some(mut dir) => {
             dir.push("glrnvim.yml");
