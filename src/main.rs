@@ -3,7 +3,7 @@ extern crate dirs;
 
 use std::process::Command;
 use quale::which;
-use std::path::{PathBuf, Path};
+use std::path::{PathBuf};
 use std::env;
 
 const ALACRITTY_NAME: &str = "alacritty";
