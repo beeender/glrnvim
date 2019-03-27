@@ -8,7 +8,7 @@ use std::env;
 
 const ALACRITTY_NAME: &str = "alacritty";
 const NVIM_NAME: &str = "nvim";
-const VERSION: &str = "0.1.1";
+const VERSION: &str = "0.1.2";
 
 struct Config {
     fork: bool,
