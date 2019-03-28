@@ -43,6 +43,15 @@ glrnvim comes with a very flexible configuration ability, just copy [glrnvim.yml
 
 Please refer to [this](https://github.com/jwilm/alacritty/wiki/Changing-the-default-font) for more information about setting font.
 
+## Tips
+
+### Set `glrnvim` as the git editor for commit message
+
+```sh
+git config --global core.editor "glrnvim --nofork"
+```
+
+
 ## Roadmap
 
 * Make a rendering benchmark vim plugin to prove this is the fastest neovim GUI.
