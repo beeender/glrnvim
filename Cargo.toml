@@ -1,9 +1,27 @@
 [package]
 name = "glrnvim"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["beeender <chenmulong@gmail.com>"]
 edition = "2018"
 
 [dependencies]
 quale = "1.0.0"
 dirs = "1.0"
+
+[package.metadata.deb]
+maintainer = "beeender <chenmulong@gmail.com>"
+copyright = "2019, beeender <chemulong@gmail.com>"
+license-file = ["LICENSE", "9"]
+depends = "$auto, neovim, alacritty"
+extended-description = """\
+A GPU-accelerated neovim GUI. \
+glrnvim is the fastest neovim gui in existence. \
+Using the GPU for rendering enables optimizations that simply aren't \
+possible without it."""
+section = "editors"
+priority = "optional"
+assets = [
+    ["target/release/glrnvim", "usr/bin/", "755"],
+    ["glrnvim.desktop", "usr/share/applications/", "644"],
+    ["glrnvim.svg", "usr/share/icons/hicolor/scalable/apps/", "644"]
+]

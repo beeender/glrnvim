@@ -25,6 +25,22 @@ glrnvim combines Open**GL**, **R**ust and **N**eo**VIM** together, to make the f
 
 Install `glrnvim` from the AUR.
 
+### Debian/Ubuntu
+
+- Install [alacritty](https://github.com/jwilm/alacritty) and [neovim](https://neovim.io) to your system.
+
+- Install [cargo-deb](https://github.com/mmstick/cargo-deb).
+
+```
+cargo install cargo-deb
+```
+
+- Build and install the `deb` package system-wide.
+
+```
+cargo deb --install
+```
+
 ## Build
 
 ### Linux & macOS
