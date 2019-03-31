@@ -8,7 +8,7 @@ use std::env;
 
 const ALACRITTY_NAME: &str = "alacritty";
 const NVIM_NAME: &str = "nvim";
-const VERSION: &str = "0.1.2";
+const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 struct Config {
     fork: bool,
