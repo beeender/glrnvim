@@ -3,8 +3,11 @@ extern crate dirs;
 
 use std::process::Command;
 use quale::which;
-use std::path::{PathBuf, Path};
+use std::path::{PathBuf};
 use std::env;
+
+#[cfg(target_os = "macos")]
+use std::path::Path;
 
 const ALACRITTY_NAME: &str = "alacritty";
 const NVIM_NAME: &str = "nvim";
