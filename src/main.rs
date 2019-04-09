@@ -58,6 +58,17 @@ fn check_alacritty() -> PathBuf {
     std::process::exit(-1);
 }
 
+#[cfg(not(target_os = "macos"))]
+fn prepare_env() {
+}
+
+#[cfg(target_os = "macos")]
+fn prepare_env() {
+    // When starting from iTerm, these env vars could cause some display issues.
+    env::remove_var("TERM_PROGRAM");
+    env::remove_var("TERM_PROGRAM_VERSION");
+}
+
 fn check_nvim() {
     let r = which(NVIM_NAME);
     if r == None {
@@ -170,6 +181,7 @@ fn main() {
         command.arg(n_arg);
     }
 
+    prepare_env();
     let mut child = command.spawn().unwrap();
     if config.unwrap().fork {
         std::process::exit(0);
