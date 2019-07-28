@@ -1,62 +1,22 @@
 extern crate quale;
 extern crate dirs;
 
+mod config;
+mod backend;
+
 use std::process::Command;
 use quale::which;
-use std::path::{PathBuf};
 use std::env;
+use config::Config;
+
+use backend::Functions;
 
 #[cfg(target_os = "macos")]
 use std::path::Path;
 
-const ALACRITTY_NAME: &str = "alacritty";
-const NVIM_NAME: &str = "nvim";
+pub const NVIM_NAME: &str = "nvim";
+
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
-
-struct Config {
-    fork: bool,
-}
-
-#[cfg(not(target_os = "macos"))]
-fn check_alacritty() -> PathBuf {
-    let r = which(ALACRITTY_NAME);
-    if r == None {
-        eprintln!("'alacritty' executable cannot be found.");
-        std::process::exit(-1);
-    }
-    return r.unwrap();
-}
-
-#[cfg(target_os = "macos")]
-fn check_alacritty() -> PathBuf {
-    let r = which(ALACRITTY_NAME);
-    if r.is_some() {
-        return r.unwrap();
-    }
-
-    {
-        let app_path = Path::new("/Applications/Alacritty.app/Contents/MacOS/");
-        let exe_path = app_path.join(ALACRITTY_NAME);
-        if exe_path.exists() && exe_path.is_file() {
-            return exe_path;
-        }
-    }
-
-    {
-        match dirs::home_dir() {
-            None => {}
-            Some(home) => {
-                let exe_path = home.join("Alacritty.app/Contents/MacOS/").join(ALACRITTY_NAME);
-                if exe_path.exists() && exe_path.is_file() {
-                    return exe_path;
-                }
-            }
-        }
-    }
-
-    eprintln!("'alacritty' executable cannot be found.");
-    std::process::exit(-1);
-}
 
 #[cfg(not(target_os = "macos"))]
 fn prepare_env() {
@@ -96,7 +56,7 @@ fn parse_args() -> (Option<Config>, Vec<String>) {
             n_args.push(arg.clone());
         }
     }
-    let config = Config {fork};
+    let config = Config {fork, fonts: vec![], font_size: 0 };
     return (Some(config), n_args);
 }
 
@@ -150,27 +110,11 @@ fn show_help() {
 }
 
 fn main() {
-    let alacritty_exe = check_alacritty();
     check_nvim();
     let (config, n_args)= parse_args();
-    assert!(config.is_some());
-    let config_dir = dirs::config_dir();
 
-    let mut command = Command::new(alacritty_exe);
-    match config_dir {
-        Some(mut dir) => {
-            dir.push("glrnvim.yml");
-            if dir.as_path().exists() {
-                command.arg("--config-file");
-                command.arg(dir.as_path().as_os_str());
-            }
-        }
-        _ => {}
-    };
-    command.arg("--class");
-    command.arg("glrnvim");
-    command.arg("-e");
-    command.arg(NVIM_NAME);
+    let backend_functions = backend::init("alacritty").unwrap();
+    let mut command = backend_functions.create_command();
 
     // Enable 24-bits colors
     command.arg("+set termguicolors");
@@ -190,4 +134,5 @@ fn main() {
         std::process::exit(_result.code().unwrap_or(-1));
     }
 }
+
 

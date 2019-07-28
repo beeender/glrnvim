@@ -7,6 +7,8 @@ edition = "2018"
 [dependencies]
 quale = "1.0.0"
 dirs = "1.0"
+rust-ini = "0.13"
+tempfile = "3.1.0"
 
 [package.metadata.deb]
 maintainer = "beeender <chenmulong@gmail.com>"
