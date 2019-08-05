@@ -7,7 +7,7 @@ mod backend;
 use std::process::Command;
 use quale::which;
 use std::env;
-use config::Config;
+use config::*;
 
 use backend::Functions;
 
@@ -56,7 +56,19 @@ fn parse_args() -> (Option<Config>, Vec<String>) {
             n_args.push(arg.clone());
         }
     }
-    let config = Config {fork, fonts: vec![], font_size: 0 };
+    let mut config = Config {fork, fonts: vec![], font_size: 12 };
+
+    let config_dir = dirs::config_dir();
+    match config_dir {
+        Some(mut dir) => {
+            dir.push("glrnvim.conf");
+            if dir.as_path().exists() {
+                config::parse(dir.as_path().to_str().unwrap(), &mut config);
+            }
+        }
+        _ => {}
+    };
+
     return (Some(config), n_args);
 }
 
@@ -113,8 +125,8 @@ fn main() {
     check_nvim();
     let (config, n_args)= parse_args();
 
-    let backend_functions = backend::init("alacritty").unwrap();
-    let mut command = backend_functions.create_command();
+    let mut backend_functions = backend::init("alacritty").unwrap();
+    let mut command = backend_functions.create_command(config.as_ref().unwrap());
 
     // Enable 24-bits colors
     command.arg("+set termguicolors");

@@ -1,7 +1,8 @@
 mod alacritty;
+use super::config::Config;
 
 pub trait Functions {
-    fn create_command(&self) -> std::process::Command;
+    fn create_command(&mut self, config: &Config) -> std::process::Command;
 }
 
 pub fn init(backend_name: &str) -> Result<impl Functions, String> {
