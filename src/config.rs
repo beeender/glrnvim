@@ -7,13 +7,16 @@ pub struct Config {
     pub font_size: u8
 }
 
-fn parse(path: &str, config: &mut Config) {
+pub fn parse(path: &str, config: &mut Config) {
     let ini = Ini::load_from_file(path).unwrap();
     let section = ini.section(None::<String>).unwrap();
 
     if let Some(fonts) = section.get("fonts") {
         for f in fonts.split(",") {
-            config.fonts.push(f.trim().to_string())
+            let tmp_str = f.trim();
+            if tmp_str.len() > 0 {
+                config.fonts.push(tmp_str.to_string());
+            }
         }
     };
 
@@ -56,14 +59,17 @@ mod tests {
             fonts: vec![],
             font_size: 0};
 
-        parse(&make_cfg_file("fonts=MonoAbc ff, ac").path, &mut config);
+        parse(&make_cfg_file("fonts=MonoAbc ff, ,ac").path, &mut config);
         assert!(config.fonts[0] == "MonoAbc ff");
         assert!(config.fonts[1] == "ac");
 
         parse(&make_cfg_file("font_size=15").path, &mut config);
         assert!(config.font_size == 15);
 
-        parse(&make_cfg_file("font_size=sadfa").path, &mut config);
-        assert!(config.font_size == 15);
+	let result = std::panic::catch_unwind(|| {
+	    let mut conf = std::panic::AssertUnwindSafe(config);
+	    parse(&make_cfg_file("font_size=sadfa").path, &mut conf)
+	});
+	assert!(result.is_err());
     }
 }
