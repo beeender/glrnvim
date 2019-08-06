@@ -3,6 +3,7 @@ use ini::Ini;
 
 pub struct Config {
     pub fork: bool,
+    pub backend: String,
     pub fonts: Vec<String>,
     pub font_size: u8
 }
@@ -10,6 +11,10 @@ pub struct Config {
 pub fn parse(path: &str, config: &mut Config) {
     let ini = Ini::load_from_file(path).unwrap();
     let section = ini.section(None::<String>).unwrap();
+
+    if let Some(backend) = section.get("backend") {
+        config.backend = backend.to_string();
+    }
 
     if let Some(fonts) = section.get("fonts") {
         for f in fonts.split(",") {
@@ -56,8 +61,10 @@ mod tests {
     fn test_parse() {
         let mut config = Config {
             fork: false,
+            backend: String::from(""),
             fonts: vec![],
-            font_size: 0};
+            font_size: 0
+        };
 
         parse(&make_cfg_file("fonts=MonoAbc ff, ,ac").path, &mut config);
         assert!(config.fonts[0] == "MonoAbc ff");
@@ -65,6 +72,9 @@ mod tests {
 
         parse(&make_cfg_file("font_size=15").path, &mut config);
         assert!(config.font_size == 15);
+
+        parse(&make_cfg_file("backend=kitty").path, &mut config);
+        assert!(config.backend == "kitty");
 
 	let result = std::panic::catch_unwind(|| {
 	    let mut conf = std::panic::AssertUnwindSafe(config);

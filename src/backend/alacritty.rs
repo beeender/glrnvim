@@ -15,44 +15,15 @@ struct Alacritty {
     temp_file: Option<NamedTempFile>
 }
 
-#[cfg(not(target_os = "macos"))]
 pub fn init() -> Result<impl Functions, String> {
-    match quale::which(ALACRITTY_NAME) {
-        Some(p) => {
+    match super::find_executable(ALACRITTY_NAME) {
+        Ok(p) => {
             return Ok(Alacritty {exe_path: p, temp_file: None});
         }
-        _ => {
-            return Err("'alacritty' executable cannot be found.".to_owned());
+        Err(e) => {
+            return Err(e);
         }
     }
-}
-
-#[cfg(target_os = "macos")]
-pub fn init() -> Result<impl Functions, String> {
-    match quale::which(ALACRITTY_NAME) {
-        Some(p) => {
-            return Ok(Alacritty {exe_path: p});
-        }
-        _ => {}
-    }
-
-    let app_path = Path::new("/Applications/Alacritty.app/Contents/MacOS/");
-    let exe_path = app_path.join(ALACRITTY_NAME);
-    if exe_path.exists() && exe_path.is_file() {
-        return Ok(Alacritty {exe_path});
-    }
-
-    match dirs::home_dir() {
-        Some(home) => {
-            let exe_path = home.join("Alacritty.app/Contents/MacOS/").join(ALACRITTY_NAME);
-            if exe_path.exists() && exe_path.is_file() {
-                return Ok(Alacritty {exe_path});
-            }
-        }
-        _ => {}
-    }
-
-    return Err("'alacritty' executable cannot be found.".to_owned());
 }
 
 impl Alacritty { fn create_conf_file(&mut self, config: &Config)  {

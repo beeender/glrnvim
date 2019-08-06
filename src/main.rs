@@ -37,7 +37,7 @@ fn check_nvim() {
     }
 }
 
-fn parse_args() -> (Option<Config>, Vec<String>) {
+fn parse_args() -> (Config, Vec<String>) {
     let args: Vec<String> = env::args().collect();
     let mut n_args: Vec<String> = Vec::new();
     let mut fork: bool = true;
@@ -56,7 +56,11 @@ fn parse_args() -> (Option<Config>, Vec<String>) {
             n_args.push(arg.clone());
         }
     }
-    let mut config = Config {fork, fonts: vec![], font_size: 12 };
+    let mut config = Config {
+        fork,
+        backend: String::from(""),
+        fonts: vec![],
+        font_size: 12 };
 
     let config_dir = dirs::config_dir();
     match config_dir {
@@ -69,7 +73,7 @@ fn parse_args() -> (Option<Config>, Vec<String>) {
         _ => {}
     };
 
-    return (Some(config), n_args);
+    return (config, n_args);
 }
 
 fn show_version() {
@@ -125,8 +129,8 @@ fn main() {
     check_nvim();
     let (config, n_args)= parse_args();
 
-    let mut backend_functions = backend::init("alacritty").unwrap();
-    let mut command = backend_functions.create_command(config.as_ref().unwrap());
+    let mut backend_functions = backend::init(config.backend.as_str()).unwrap();
+    let mut command = backend_functions.create_command(&config);
 
     // Enable 24-bits colors
     command.arg("+set termguicolors");
@@ -139,7 +143,7 @@ fn main() {
 
     prepare_env();
     let mut child = command.spawn().unwrap();
-    if config.unwrap().fork {
+    if config.fork {
         std::process::exit(0);
     } else {
         let _result = child.wait().unwrap();
