@@ -132,11 +132,6 @@ fn main() {
     let mut backend_functions = backend::init(config.backend.as_str()).unwrap();
     let mut command = backend_functions.create_command(&config);
 
-    // Enable 24-bits colors
-    command.arg("+set termguicolors");
-    // Set title string
-    command.arg("+set title");
-
     for n_arg in &n_args {
         command.arg(n_arg);
     }

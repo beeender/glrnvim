@@ -1,4 +1,5 @@
 mod alacritty;
+mod urxvt;
 use super::config::Config;
 use std::path::PathBuf;
 
@@ -7,12 +8,14 @@ pub trait Functions {
 }
 
 pub fn init(backend_name: &str) -> Result<impl Functions, String> {
-    if backend_name.to_lowercase() == alacritty::ALACRITTY_NAME {
-        return alacritty::init();
-    }
+    let name = backend_name.to_lowercase();
 
-    return Err(format!("Backend terminal '{}' is not supported.",
-            backend_name));
+    return match name.as_str() {
+        //alacritty::ALACRITTY_NAME => alacritty::init(),
+        urxvt::URXVT_NAME => urxvt::init(),
+        _ => Err(format!("Backend terminal '{}' is not supported.",
+                backend_name)),
+    };
 }
 
 #[cfg(not(target_os = "macos"))]

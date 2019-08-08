@@ -26,7 +26,8 @@ pub fn init() -> Result<impl Functions, String> {
     }
 }
 
-impl Alacritty { fn create_conf_file(&mut self, config: &Config)  {
+impl Alacritty {
+    fn create_conf_file(&mut self, config: &Config)  {
         let mut file = tempfile::NamedTempFile::new().unwrap();
         writeln!(file, "font:").unwrap();
         writeln!(file, "  size: {}", config.font_size).unwrap();
