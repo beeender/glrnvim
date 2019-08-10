@@ -1,5 +1,6 @@
 mod alacritty;
 mod urxvt;
+mod kitty;
 use super::config::Config;
 use std::path::PathBuf;
 
@@ -13,6 +14,7 @@ pub fn init(backend_name: &str) -> Result<Box<dyn Functions>, String> {
     return match name.as_str() {
         alacritty::ALACRITTY_NAME => alacritty::init(),
         urxvt::URXVT_NAME => urxvt::init(),
+        kitty::KITTY_NAME => kitty::init(),
         _ => Err(format!("Backend terminal '{}' is not supported.",
                 backend_name)),
     };
