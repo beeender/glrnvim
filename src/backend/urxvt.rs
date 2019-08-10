@@ -44,8 +44,13 @@ impl Functions for Urxvt {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
         self.init_args(config);
         let mut command = std::process::Command::new(self.exe_path.to_owned());
+
         command.arg("-name");
         command.arg("glrnvim");
+        // Disable Ctrl-Z. Shouldn't this pass ^Z to nvim??
+        command.arg("-keysym.C-z:");
+        command.arg("builtin-string:");
+
         for arg in &self.args {
             command.arg(arg);
         }
