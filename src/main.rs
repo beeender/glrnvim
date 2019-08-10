@@ -9,8 +9,6 @@ use quale::which;
 use std::env;
 use config::*;
 
-use backend::Functions;
-
 #[cfg(target_os = "macos")]
 use std::path::Path;
 

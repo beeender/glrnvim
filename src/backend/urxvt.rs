@@ -10,10 +10,10 @@ struct Urxvt {
     pub args: Vec<String>
 }
 
-pub fn init() -> Result<impl Functions, String> {
+pub fn init() -> Result<Box<dyn Functions>, String> {
     match super::find_executable(URXVT_NAME) {
         Ok(p) => {
-            return Ok(Urxvt {exe_path: p, args: vec![]});
+            return Ok(Box::new(Urxvt {exe_path: p, args: vec![]}));
         }
         Err(e) => {
             return Err(e);
@@ -28,7 +28,7 @@ impl Urxvt {
             if fn_arg.is_empty() {
                 self.args.push(String::from("-fn"));
                 fn_arg.push_str(
-                    format!("xft:{}:pixelsize={}:antialias=true", font, config.font_size).as_str());
+                    format!("xft:{}:size={}:antialias=true", font, config.font_size).as_str());
             } else {
                 fn_arg.push_str(
                     format!(",xft:{}:antialias=true", font).as_str());

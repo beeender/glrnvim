@@ -15,10 +15,10 @@ struct Alacritty {
     temp_file: Option<NamedTempFile>
 }
 
-pub fn init() -> Result<impl Functions, String> {
+pub fn init() -> Result<Box<dyn Functions>, String> {
     match super::find_executable(ALACRITTY_NAME) {
         Ok(p) => {
-            return Ok(Alacritty {exe_path: p, temp_file: None});
+            return Ok(Box::new(Alacritty {exe_path: p, temp_file: None}));
         }
         Err(e) => {
             return Err(e);

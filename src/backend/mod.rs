@@ -7,11 +7,11 @@ pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
 }
 
-pub fn init(backend_name: &str) -> Result<impl Functions, String> {
+pub fn init(backend_name: &str) -> Result<Box<dyn Functions>, String> {
     let name = backend_name.to_lowercase();
 
     return match name.as_str() {
-        //alacritty::ALACRITTY_NAME => alacritty::init(),
+        alacritty::ALACRITTY_NAME => alacritty::init(),
         urxvt::URXVT_NAME => urxvt::init(),
         _ => Err(format!("Backend terminal '{}' is not supported.",
                 backend_name)),
