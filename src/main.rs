@@ -119,15 +119,33 @@ fn show_help() {
         println!("{}", line);
     }
 
-    println!("\nConfig file: $HOME/.config/glrnvim.yml");
-    println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
+    println!("\nConfig file: $HOME/.config/glrnvim.conf");
+    println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.conf for example.");
+}
+
+fn choose_backend(config: &Config) -> Result<Box<dyn backend::Functions>, String> {
+    if config.backend.is_empty() {
+        for backend in backend::BACKEND_LIST {
+            match backend::init(backend) {
+                Ok(functions) => {
+                    return Ok(functions);
+                }
+                _ => {}
+            }
+        }
+        return Err(
+            format!("None of the suppported terminals can be found. {:?}", backend::BACKEND_LIST)
+            .to_owned());
+    }
+    return Ok(backend::init(config.backend.as_str()).unwrap());
 }
 
 fn main() {
     check_nvim();
     let (config, n_args)= parse_args();
 
-    let mut backend_functions = backend::init(config.backend.as_str()).unwrap();
+    let mut backend_functions = choose_backend(&config).unwrap();
+
     let mut command = backend_functions.create_command(&config);
 
     for n_arg in &n_args {

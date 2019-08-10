@@ -4,6 +4,11 @@ mod kitty;
 use super::config::Config;
 use std::path::PathBuf;
 
+pub const BACKEND_LIST: &'static [&'static str] = &[
+    alacritty::ALACRITTY_NAME,
+    urxvt::URXVT_NAME,
+    kitty::KITTY_NAME];
+
 pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
 }
