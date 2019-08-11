@@ -5,10 +5,11 @@ authors = ["beeender <chenmulong@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-quale = "1.0.0"
+quale = "1.0"
 dirs = "1.0"
-rust-ini = "0.13"
-tempfile = "3.1.0"
+tempfile = "3.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.8"
 
 [package.metadata.deb]
 maintainer = "beeender <chenmulong@gmail.com>"
@@ -27,3 +28,7 @@ assets = [
     ["glrnvim.desktop", "usr/share/applications/", "644"],
     ["glrnvim.svg", "usr/share/icons/hicolor/scalable/apps/", "644"]
 ]
+
+[profile.dev]
+opt-level = 0
+debug = true

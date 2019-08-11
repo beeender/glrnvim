@@ -54,16 +54,13 @@ fn parse_args() -> (Config, Vec<String>) {
             n_args.push(arg.clone());
         }
     }
-    let mut config = Config {
-        fork,
-        backend: String::from(""),
-        fonts: vec![],
-        font_size: 12 };
+    let mut config = Config::default();
+    config.fork = fork;
 
     let config_dir = dirs::config_dir();
     match config_dir {
         Some(mut dir) => {
-            dir.push("glrnvim.conf");
+            dir.push("glrnvim.yml");
             if dir.as_path().exists() {
                 config::parse(dir.as_path().to_str().unwrap(), &mut config);
             }
@@ -119,8 +116,8 @@ fn show_help() {
         println!("{}", line);
     }
 
-    println!("\nConfig file: $HOME/.config/glrnvim.conf");
-    println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.conf for example.");
+    println!("\nConfig file: $HOME/.config/glrnvim.yml");
+    println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
 }
 
 fn choose_backend(config: &Config) -> Result<Box<dyn backend::Functions>, String> {
