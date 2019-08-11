@@ -7,7 +7,7 @@ arch=('x86_64' 'i686')
 url='https://github.com/beeender/glrnvim'
 license=('GPL3')
 makedepends=('rust' 'cargo' 'git')
-source=("git+https://github.com/beeender/glrnvim.git#tag=v$pkgver-beta0")
+source=("git+https://github.com/beeender/glrnvim.git#tag=v$pkgver")
 sha256sums=('SKIP')
 
 package_glrnvim() {
