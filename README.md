@@ -11,7 +11,7 @@ See the speed from the screenshot:
 
 glrnvim combines Open**GL** (possibly), **R**ust and **N**eo**VIM** together, to make the fastest, simplest neovim GUI.
 
-The above things are not totally lie. The intention of this project was that I couldn't find a standalone neovim GUI fast and stable like the old gvim. All the existing neovim GUIs are either not fast enough (what do you expect from Electron?) or not stable enough. I have been using [neovim-gnome-terminal-wrapper](https://github.com/fmoralesc/neovim-gnome-terminal-wrapper) for a long time and it is much better than any other fancy GUIs. The only thing is, it only supports gnome-terminal.
+The above things are not totally lie. The intention of this project was that I couldn't find a standalone neovim GUI fast and stable like the old gvim. All the existing neovim GUIs are either not fast enough (what do you expect from Electron?) or not stable enough. I have been using [neovim-gnome-terminal-wrapper](https://github.com/fmoralesc/neovim-gnome-terminal-wrapper) for a long time and it is much better than any other fancy GUIs. The only thing is, it doesn't support other terminals than gnome-terminal.
 
 glrnvim wraps nvim with your favourite terminal into a standalone, non-fancy but daily-usable neovim GUI.
 
