@@ -5,9 +5,6 @@ use crate::config::Config;
 use tempfile::NamedTempFile;
 use std::io::Write;
 
-#[cfg(target_os = "macos")]
-use std::path::Path;
-
 pub const ALACRITTY_NAME: &str = "alacritty";
 
 struct Alacritty {

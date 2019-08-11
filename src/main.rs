@@ -9,9 +9,6 @@ use quale::which;
 use std::env;
 use config::*;
 
-#[cfg(target_os = "macos")]
-use std::path::Path;
-
 pub const NVIM_NAME: &str = "nvim";
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
