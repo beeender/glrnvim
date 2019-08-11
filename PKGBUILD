@@ -1,7 +1,7 @@
 # Maintainer: beeender <chenmulong@gmail.com>
 pkgname=('glrnvim')
 _pkgname="glrnvim"
-pkgver=0.1.1
+pkgver=1.0.0-beta0
 pkgrel=0
 arch=('x86_64' 'i686')
 url='https://github.com/beeender/glrnvim'
@@ -12,7 +12,8 @@ sha256sums=('SKIP')
 
 package_glrnvim() {
 	pkgdesc="A GPU-accelerated neovim GUI."
-	depends=('alacritty' 'neovim')
+	depends=('neovim')
+    optdepends=('alacritty')
 	provides=('glrnvim')
 
 	cd "$srcdir/$_pkgname"
