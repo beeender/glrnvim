@@ -1,6 +1,11 @@
 CHANGES
 --------
 
+1.0.0
+
+- **BREAKING** Config file format changed.
+- Support more terminals, kitty and urxvt.
+
 0.1.2
 
 - Fix display issues when start from iTerm on MacOS.
