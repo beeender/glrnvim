@@ -72,7 +72,7 @@ fn show_version() {
     let n_ver_out = Command::new("nvim")
         .arg("-v")
         .output()
-        .expect("You have to install a proper nvim.");;
+        .expect("You have to install a proper nvim.");
     if !n_ver_out.status.success()  {
         std::process::exit(-1);
     }
@@ -84,7 +84,7 @@ fn show_help() {
     let n_help_out = Command::new("nvim")
         .arg("-h")
         .output()
-        .expect("You have to install a proper nvim.");;
+        .expect("You have to install a proper nvim.");
     if !n_help_out.status.success()  {
         std::process::exit(-1);
     }
