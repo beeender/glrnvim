@@ -3,12 +3,13 @@ extern crate serde_yaml;
 
 use serde::Deserialize;
 
+const DEFAULT_FONT_SIZE: u8 = 12;
+
 #[derive(Debug, Deserialize)]
 pub struct Config {
     #[serde(skip)]
     pub fork: bool,
-    #[serde(default)]
-    pub backend: String,
+    pub backend: Option<String>,
     #[serde(default)]
     pub fonts: Vec<String>,
     #[serde(default = "default_font_size")]
@@ -17,18 +18,18 @@ pub struct Config {
 
 impl Default for Config {
     fn default() -> Self {
-        Config {
+        Self {
             fork: false,
-            backend: "".to_owned(),
+            backend: None,
             fonts: Vec::new(),
-            font_size: 12,
+            font_size: DEFAULT_FONT_SIZE,
         }
     }
 }
 
 #[allow(dead_code)]
 fn default_font_size() -> u8 {
-    return 12;
+    DEFAULT_FONT_SIZE
 }
 
 pub fn parse(path: &str, config: &mut Config) {
@@ -79,18 +80,17 @@ mod tests {
         file.write(content.as_bytes()).unwrap();
         file.flush().unwrap();
         drop(file);
-        let tmp_conf_file = TempConfFile {
+        TempConfFile {
             _dir: dir,
             path: file_path.into_os_string().into_string().unwrap(),
-        };
-        return tmp_conf_file;
+        }
     }
 
     #[test]
     fn test_parse() {
         let mut config = Config {
             fork: false,
-            backend: String::from(""),
+            backend: None,
             fonts: vec![],
             font_size: 0,
         };
@@ -110,18 +110,18 @@ fonts:
         assert!(config.fonts[0] == "MonoAbc ff");
         assert!(config.fonts[1] == "ac");
         assert!(config.font_size == 12);
-        assert!(config.backend.is_empty());
+        assert!(config.backend.is_none());
 
         parse(&make_cfg_file("font_size: 15").path, &mut config);
         assert!(config.font_size == 15);
         assert!(config.fonts.is_empty());
 
         parse(&make_cfg_file("backend: kitty").path, &mut config);
-        assert!(config.backend == "kitty");
+        assert!(config.backend == Some("kitty".to_string()));
 
         // Empty config
         parse(&make_cfg_file("").path, &mut config);
-        assert!(config.backend == "");
+        assert!(config.backend.is_none());
         assert!(config.fonts.is_empty());
         assert!(config.font_size == 12);
 
