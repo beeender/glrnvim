@@ -51,8 +51,12 @@ impl Functions for Kitty {
         let mut command = std::process::Command::new(self.exe_path.to_owned());
         command.arg("--config");
         command.arg(self.temp_file.as_ref().unwrap().path());
-        command.arg("--class");
-        command.arg("glrnvim");
+
+        if cfg!(target_os = "linux") {
+            command.arg("--class");
+            command.arg("glrnvim");
+        }
+
         command.arg(NVIM_NAME);
 
         // Enable 24-bits colors
