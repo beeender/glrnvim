@@ -1,5 +1,6 @@
 use super::Functions;
 use crate::config::Config;
+use crate::error::GlrnvimError;
 use crate::NVIM_NAME;
 use std::io::Write;
 use std::path::PathBuf;
@@ -12,18 +13,13 @@ struct Kitty {
     temp_file: Option<NamedTempFile>,
 }
 
-pub fn init() -> Result<Box<dyn Functions>, String> {
-    match super::find_executable(KITTY_NAME) {
-        Ok(p) => {
-            return Ok(Box::new(Kitty {
-                exe_path: p,
-                temp_file: None,
-            }));
-        }
-        Err(e) => {
-            return Err(e);
-        }
-    }
+pub fn init() -> Result<Box<dyn Functions>, GlrnvimError> {
+    let exe_path = super::find_executable(KITTY_NAME)?;
+
+    Ok(Box::new(Kitty {
+        exe_path,
+        temp_file: None,
+    }))
 }
 
 impl Kitty {
@@ -66,6 +62,6 @@ impl Functions for Kitty {
         command.arg("+set termguicolors");
         // Set title string
         command.arg("+set title");
-        return command;
+        command
     }
 }

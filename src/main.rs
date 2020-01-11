@@ -3,6 +3,7 @@ extern crate quale;
 
 mod backend;
 mod config;
+mod error;
 
 use config::*;
 use quale::which;
@@ -24,9 +25,8 @@ fn prepare_env() {
 }
 
 fn check_nvim() {
-    let r = which(NVIM_NAME);
-    if r == None {
-        eprintln!("'nvim' executable cannot be found.");
+    if let None = which(NVIM_NAME) {
+        eprintln!("'{}' executable cannot be found.", NVIM_NAME);
         std::process::exit(-1);
     }
 }
@@ -116,8 +116,10 @@ fn show_help() {
     println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
 }
 
-fn choose_backend(config: &Config) -> Result<Box<dyn backend::Functions>, String> {
-    if config.backend.is_empty() {
+fn choose_backend(config: &Config) -> Result<Box<dyn backend::Functions>, error::GlrnvimError> {
+    if let Some(backend) = &config.backend {
+        Ok(backend::init(backend.as_str())?)
+    } else {
         for backend in backend::BACKEND_LIST {
             match backend::init(backend) {
                 Ok(functions) => {
@@ -126,33 +128,29 @@ fn choose_backend(config: &Config) -> Result<Box<dyn backend::Functions>, String
                 _ => {}
             }
         }
-        return Err(format!(
+        return Err(error::GlrnvimError::new(format!(
             "None of the suppported terminals can be found. {:?}",
             backend::BACKEND_LIST
-        )
-        .to_owned());
+        )));
     }
-    return Ok(backend::init(config.backend.as_str()).unwrap());
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     check_nvim();
     let (config, n_args) = parse_args();
 
-    let mut backend_functions = choose_backend(&config).unwrap();
+    let mut backend_functions = choose_backend(&config)?;
 
     let mut command = backend_functions.create_command(&config);
 
-    for n_arg in &n_args {
-        command.arg(n_arg);
-    }
+    command.args(&n_args);
 
     prepare_env();
-    let mut child = command.spawn().unwrap();
+    let mut child = command.spawn()?;
     if config.fork {
         std::process::exit(0);
     } else {
-        let _result = child.wait().unwrap();
-        std::process::exit(_result.code().unwrap_or(-1));
+        let result = child.wait()?;
+        std::process::exit(result.code().unwrap_or(-1));
     }
 }

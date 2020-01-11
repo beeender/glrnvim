@@ -1,5 +1,6 @@
 use super::Functions;
 use crate::config::Config;
+use crate::error::GlrnvimError;
 use crate::NVIM_NAME;
 use std::path::PathBuf;
 
@@ -10,18 +11,13 @@ struct Urxvt {
     pub args: Vec<String>,
 }
 
-pub fn init() -> Result<Box<dyn Functions>, String> {
-    match super::find_executable(URXVT_NAME) {
-        Ok(p) => {
-            return Ok(Box::new(Urxvt {
-                exe_path: p,
-                args: vec![],
-            }));
-        }
-        Err(e) => {
-            return Err(e);
-        }
-    }
+pub fn init() -> Result<Box<dyn Functions>, GlrnvimError> {
+    let exe_path = super::find_executable(URXVT_NAME)?;
+
+    Ok(Box::new(Urxvt {
+        exe_path,
+        args: vec![],
+    }))
 }
 
 impl Urxvt {
@@ -53,10 +49,7 @@ impl Functions for Urxvt {
         // Disable Ctrl-Z. Shouldn't this pass ^Z to nvim??
         command.arg("-keysym.C-z:");
         command.arg("builtin-string:");
-
-        for arg in &self.args {
-            command.arg(arg);
-        }
+        command.args(&self.args);
         command.arg("-e");
         command.arg(NVIM_NAME);
 
@@ -64,6 +57,6 @@ impl Functions for Urxvt {
         command.arg("+set termguicolors");
         // Set title string
         command.arg("+set title");
-        return command;
+        command
     }
 }
