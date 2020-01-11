@@ -1,21 +1,24 @@
 use super::Functions;
-use std::path::{PathBuf};
 use crate::config::Config;
 use crate::NVIM_NAME;
-use tempfile::NamedTempFile;
 use std::io::Write;
+use std::path::PathBuf;
+use tempfile::NamedTempFile;
 
 pub const KITTY_NAME: &str = "kitty";
 
 struct Kitty {
     exe_path: PathBuf,
-    temp_file: Option<NamedTempFile>
+    temp_file: Option<NamedTempFile>,
 }
 
 pub fn init() -> Result<Box<dyn Functions>, String> {
     match super::find_executable(KITTY_NAME) {
         Ok(p) => {
-            return Ok(Box::new(Kitty {exe_path: p, temp_file: None}));
+            return Ok(Box::new(Kitty {
+                exe_path: p,
+                temp_file: None,
+            }));
         }
         Err(e) => {
             return Err(e);
@@ -24,7 +27,7 @@ pub fn init() -> Result<Box<dyn Functions>, String> {
 }
 
 impl Kitty {
-    fn create_conf_file(&mut self, config: &Config)  {
+    fn create_conf_file(&mut self, config: &Config) {
         let mut file = tempfile::NamedTempFile::new().unwrap();
 
         if !config.fonts.is_empty() {

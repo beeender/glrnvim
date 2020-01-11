@@ -1,21 +1,24 @@
-use std::path::{PathBuf};
 use super::Functions;
-use crate::NVIM_NAME;
 use crate::config::Config;
-use tempfile::NamedTempFile;
+use crate::NVIM_NAME;
 use std::io::Write;
+use std::path::PathBuf;
+use tempfile::NamedTempFile;
 
 pub const ALACRITTY_NAME: &str = "alacritty";
 
 struct Alacritty {
     exe_path: PathBuf,
-    temp_file: Option<NamedTempFile>
+    temp_file: Option<NamedTempFile>,
 }
 
 pub fn init() -> Result<Box<dyn Functions>, String> {
     match super::find_executable(ALACRITTY_NAME) {
         Ok(p) => {
-            return Ok(Box::new(Alacritty {exe_path: p, temp_file: None}));
+            return Ok(Box::new(Alacritty {
+                exe_path: p,
+                temp_file: None,
+            }));
         }
         Err(e) => {
             return Err(e);
@@ -24,7 +27,7 @@ pub fn init() -> Result<Box<dyn Functions>, String> {
 }
 
 impl Alacritty {
-    fn create_conf_file(&mut self, config: &Config)  {
+    fn create_conf_file(&mut self, config: &Config) {
         let mut file = tempfile::NamedTempFile::new().unwrap();
         writeln!(file, "font:").unwrap();
         writeln!(file, "  size: {}", config.font_size).unwrap();
@@ -38,7 +41,6 @@ impl Alacritty {
             // See https://github.com/jwilm/alacritty/issues/957
             break;
         }
-
 
         writeln!(file, "key_bindings:").unwrap();
         writeln!(file, "  - {{key: Z, mods: Control, action: None}} ").unwrap();
@@ -73,4 +75,3 @@ impl Functions for Alacritty {
         return command;
     }
 }
-

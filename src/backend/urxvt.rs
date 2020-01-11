@@ -1,19 +1,22 @@
 use super::Functions;
-use std::path::{PathBuf};
 use crate::config::Config;
 use crate::NVIM_NAME;
+use std::path::PathBuf;
 
 pub const URXVT_NAME: &str = "urxvt";
 
 struct Urxvt {
     exe_path: PathBuf,
-    pub args: Vec<String>
+    pub args: Vec<String>,
 }
 
 pub fn init() -> Result<Box<dyn Functions>, String> {
     match super::find_executable(URXVT_NAME) {
         Ok(p) => {
-            return Ok(Box::new(Urxvt {exe_path: p, args: vec![]}));
+            return Ok(Box::new(Urxvt {
+                exe_path: p,
+                args: vec![],
+            }));
         }
         Err(e) => {
             return Err(e);
@@ -28,10 +31,10 @@ impl Urxvt {
             if fn_arg.is_empty() {
                 self.args.push(String::from("-fn"));
                 fn_arg.push_str(
-                    format!("xft:{}:size={}:antialias=true", font, config.font_size).as_str());
+                    format!("xft:{}:size={}:antialias=true", font, config.font_size).as_str(),
+                );
             } else {
-                fn_arg.push_str(
-                    format!(",xft:{}:antialias=true", font).as_str());
+                fn_arg.push_str(format!(",xft:{}:antialias=true", font).as_str());
             }
         }
         if !fn_arg.is_empty() {
