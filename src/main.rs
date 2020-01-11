@@ -1,21 +1,20 @@
-extern crate quale;
 extern crate dirs;
+extern crate quale;
 
-mod config;
 mod backend;
+mod config;
 
-use std::process::Command;
+use config::*;
 use quale::which;
 use std::env;
-use config::*;
+use std::process::Command;
 
 pub const NVIM_NAME: &str = "nvim";
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 #[cfg(not(target_os = "macos"))]
-fn prepare_env() {
-}
+fn prepare_env() {}
 
 #[cfg(target_os = "macos")]
 fn prepare_env() {
@@ -73,7 +72,7 @@ fn show_version() {
         .arg("-v")
         .output()
         .expect("You have to install a proper nvim.");
-    if !n_ver_out.status.success()  {
+    if !n_ver_out.status.success() {
         std::process::exit(-1);
     }
     println!("glrnvim {}\n", VERSION);
@@ -85,7 +84,7 @@ fn show_help() {
         .arg("-h")
         .output()
         .expect("You have to install a proper nvim.");
-    if !n_help_out.status.success()  {
+    if !n_help_out.status.success() {
         std::process::exit(-1);
     }
 
@@ -127,16 +126,18 @@ fn choose_backend(config: &Config) -> Result<Box<dyn backend::Functions>, String
                 _ => {}
             }
         }
-        return Err(
-            format!("None of the suppported terminals can be found. {:?}", backend::BACKEND_LIST)
-            .to_owned());
+        return Err(format!(
+            "None of the suppported terminals can be found. {:?}",
+            backend::BACKEND_LIST
+        )
+        .to_owned());
     }
     return Ok(backend::init(config.backend.as_str()).unwrap());
 }
 
 fn main() {
     check_nvim();
-    let (config, n_args)= parse_args();
+    let (config, n_args) = parse_args();
 
     let mut backend_functions = choose_backend(&config).unwrap();
 
@@ -155,5 +156,3 @@ fn main() {
         std::process::exit(_result.code().unwrap_or(-1));
     }
 }
-
-

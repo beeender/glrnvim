@@ -12,7 +12,7 @@ pub struct Config {
     #[serde(default)]
     pub fonts: Vec<String>,
     #[serde(default = "default_font_size")]
-    pub font_size: u8
+    pub font_size: u8,
 }
 
 impl Default for Config {
@@ -21,7 +21,7 @@ impl Default for Config {
             fork: false,
             backend: "".to_owned(),
             fonts: Vec::new(),
-            font_size: 12
+            font_size: 12,
         }
     }
 }
@@ -36,17 +36,22 @@ pub fn parse(path: &str, config: &mut Config) {
     let reader = std::io::BufReader::new(file);
     let conf: Config = match serde_yaml::from_reader(reader) {
         Ok(c) => c,
-        Err(e) =>  {
+        Err(e) => {
             // Work around the empty yaml file issue.
             // See https://github.com/dtolnay/serde-yaml/issues/86
-            if e.to_string() == "EOF while parsing a value" { Config::default() }
-            else { panic!(e.to_string()) }
+            if e.to_string() == "EOF while parsing a value" {
+                Config::default()
+            } else {
+                panic!(e.to_string())
+            }
         }
     };
 
     config.backend = conf.backend;
     // Filter out empty strings
-    config.fonts = conf.fonts.into_iter()
+    config.fonts = conf
+        .fonts
+        .into_iter()
         .filter(|s| !s.is_empty() && s != "~")
         .collect::<Vec<_>>();
     config.font_size = conf.font_size;
@@ -54,17 +59,16 @@ pub fn parse(path: &str, config: &mut Config) {
 
 #[cfg(test)]
 mod tests {
-    use tempfile::{tempdir, TempDir};
     use std::fs::File;
     use std::io::Write;
+    use tempfile::{tempdir, TempDir};
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
 
     struct TempConfFile {
         _dir: TempDir,
-        path: String
+        path: String,
     }
-
 
     fn make_cfg_file(content: &str) -> TempConfFile {
         // Create a directory inside of `std::env::temp_dir()`.
@@ -76,7 +80,8 @@ mod tests {
         file.flush().unwrap();
         drop(file);
         let tmp_conf_file = TempConfFile {
-            _dir: dir, path: file_path.into_os_string().into_string().unwrap()
+            _dir: dir,
+            path: file_path.into_os_string().into_string().unwrap(),
         };
         return tmp_conf_file;
     }
@@ -87,16 +92,21 @@ mod tests {
             fork: false,
             backend: String::from(""),
             fonts: vec![],
-            font_size: 0
+            font_size: 0,
         };
 
-        parse(&make_cfg_file(r#"
+        parse(
+            &make_cfg_file(
+                r#"
 fonts:
   - MonoAbc ff
   -
   - ac
-"#)
-            .path, &mut config);
+"#,
+            )
+            .path,
+            &mut config,
+        );
         assert!(config.fonts[0] == "MonoAbc ff");
         assert!(config.fonts[1] == "ac");
         assert!(config.font_size == 12);
@@ -115,10 +125,10 @@ fonts:
         assert!(config.fonts.is_empty());
         assert!(config.font_size == 12);
 
-	let result = std::panic::catch_unwind(|| {
-	    let mut conf = std::panic::AssertUnwindSafe(config);
-	    parse(&make_cfg_file("font_size: sadfa").path, &mut conf)
-	});
-	assert!(result.is_err());
+        let result = std::panic::catch_unwind(|| {
+            let mut conf = std::panic::AssertUnwindSafe(config);
+            parse(&make_cfg_file("font_size: sadfa").path, &mut conf)
+        });
+        assert!(result.is_err());
     }
 }
