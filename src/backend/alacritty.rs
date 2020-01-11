@@ -57,6 +57,12 @@ impl Functions for Alacritty {
         command.arg(self.temp_file.as_ref().unwrap().path());
         command.arg("--class");
         command.arg("glrnvim");
+
+        if let Ok(current_dir) = std::env::current_dir() {
+            command.arg("--working-directory");
+            command.arg(current_dir);
+        }
+
         command.arg("-e");
         command.arg(NVIM_NAME);
 
