@@ -60,9 +60,11 @@ impl Functions for Alacritty {
         command.arg("--class");
         command.arg("glrnvim");
 
-        if let Ok(current_dir) = std::env::current_dir() {
-            command.arg("--working-directory");
-            command.arg(current_dir);
+        if cfg!(target_os = "macos") {
+            if let Ok(current_dir) = std::env::current_dir() {
+                command.arg("--working-directory");
+                command.arg(current_dir);
+            }
         }
 
         command.arg("-e");
