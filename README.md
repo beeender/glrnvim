@@ -1,6 +1,6 @@
 glrnvim
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 =======
 [![Build Status](https://travis-ci.com/beeender/glrnvim.svg?branch=master)](https://travis-ci.com/beeender/glrnvim)
@@ -86,6 +86,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/Stanislav-Lapata"><img src="https://avatars1.githubusercontent.com/u/12072329?v=4" width="100px;" alt=""/><br /><sub><b>Stanislav Lapata</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=Stanislav-Lapata" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/yeyan"><img src="https://avatars1.githubusercontent.com/u/5893217?v=4" width="100px;" alt=""/><br /><sub><b>Ye Yan</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=yeyan" title="Code">💻</a></td>
   </tr>
 </table>
 
