@@ -1,4 +1,7 @@
 glrnvim
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 =======
 [![Build Status](https://travis-ci.com/beeender/glrnvim.svg?branch=master)](https://travis-ci.com/beeender/glrnvim)
 
@@ -72,3 +75,22 @@ git config --global core.editor "glrnvim --nofork"
 _Color scheme doesn't work well with urxvt backend._
 
 glrnvim uses `set termguicolors` to achieve an easy and better color scheme support. However, that requires the terminal to support true colors. Urxvt never has an official release to support it. Although the true color patch has been merged many years ago. If you are using Arch, just install [rxvt-unicode-cvs](https://aur.archlinux.org/packages/rxvt-unicode-cvs) from aur.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/Stanislav-Lapata"><img src="https://avatars1.githubusercontent.com/u/12072329?v=4" width="100px;" alt=""/><br /><sub><b>Stanislav Lapata</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=Stanislav-Lapata" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
