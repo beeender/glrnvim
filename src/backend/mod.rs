@@ -2,31 +2,43 @@ mod alacritty;
 mod kitty;
 mod urxvt;
 use super::config::Config;
+use crate::config::Backend;
 use crate::error::GlrnvimError;
 use std::path::PathBuf;
-
-pub const BACKEND_LIST: &'static [&'static str] = &[
-    alacritty::ALACRITTY_NAME,
-    urxvt::URXVT_NAME,
-    kitty::KITTY_NAME,
-];
 
 pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
 }
 
-pub fn init(backend_name: &str) -> Result<Box<dyn Functions>, GlrnvimError> {
-    let name = backend_name.to_lowercase();
+pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
+    match &config.backend {
+        Some(backend) => match backend {
+            Backend::Alacritty => alacritty::init(config),
+            Backend::Urxvt => urxvt::init(config),
+            Backend::Kitty => kitty::init(config),
+        },
+        None => {
+            for init_func in &[alacritty::init, urxvt::init, kitty::init] {
+                match init_func(config) {
+                    Ok(functions) => return Ok(functions),
+                    Err(_) => {}
+                }
+            }
 
-    return match name.as_str() {
-        alacritty::ALACRITTY_NAME => alacritty::init(),
-        urxvt::URXVT_NAME => urxvt::init(),
-        kitty::KITTY_NAME => kitty::init(),
-        _ => Err(GlrnvimError::new(format!(
-            "Backend terminal '{}' is not supported.",
-            backend_name
-        ))),
+            Err(GlrnvimError::new(format!(
+                "None of the suppported terminals can be found.",
+            )))
+        }
+    }
+}
+
+fn exe_path(exe_path: &Option<String>, exe_name: &str) -> Result<PathBuf, GlrnvimError> {
+    let exe_name = match exe_path {
+        Some(exe_path) => PathBuf::from(exe_path),
+        None => find_executable(exe_name)?,
     };
+
+    Ok(exe_name)
 }
 
 #[cfg(not(target_os = "macos"))]
