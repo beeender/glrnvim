@@ -25,7 +25,7 @@ fn prepare_env() {
 }
 
 fn check_nvim() {
-    if let None = which(NVIM_NAME) {
+    if which(NVIM_NAME).is_none() {
         eprintln!("'{}' executable cannot be found.", NVIM_NAME);
         std::process::exit(-1);
     }
@@ -50,21 +50,16 @@ fn parse_args() -> (Config, Vec<String>) {
             n_args.push(arg.clone());
         }
     }
-    let mut config = Config::default();
-    config.fork = fork;
 
-    let config_dir = dirs::config_dir();
-    match config_dir {
+    let config = match dirs::config_dir() {
         Some(mut dir) => {
             dir.push("glrnvim.yml");
-            if dir.as_path().exists() {
-                config::parse(dir.as_path().to_str().unwrap(), &mut config);
-            }
+            config::parse(dir, fork)
         }
-        _ => {}
+        None => Config::default(),
     };
 
-    return (config, n_args);
+    (config, n_args)
 }
 
 fn show_version() {
@@ -116,30 +111,11 @@ fn show_help() {
     println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
 }
 
-fn choose_backend(config: &Config) -> Result<Box<dyn backend::Functions>, error::GlrnvimError> {
-    if let Some(backend) = &config.backend {
-        Ok(backend::init(backend.as_str())?)
-    } else {
-        for backend in backend::BACKEND_LIST {
-            match backend::init(backend) {
-                Ok(functions) => {
-                    return Ok(functions);
-                }
-                _ => {}
-            }
-        }
-        return Err(error::GlrnvimError::new(format!(
-            "None of the suppported terminals can be found. {:?}",
-            backend::BACKEND_LIST
-        )));
-    }
-}
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     check_nvim();
     let (config, n_args) = parse_args();
 
-    let mut backend_functions = choose_backend(&config)?;
+    let mut backend_functions = backend::init(&config)?;
 
     let mut command = backend_functions.create_command(&config);
 

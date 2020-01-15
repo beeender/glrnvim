@@ -7,8 +7,10 @@ pub struct GlrnvimError {
 }
 
 impl GlrnvimError {
-    pub fn new(message: String) -> Self {
-        Self { message }
+    pub fn new<T: Into<String>>(message: T) -> Self {
+        Self {
+            message: message.into(),
+        }
     }
 }
 

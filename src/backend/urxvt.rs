@@ -11,8 +11,8 @@ struct Urxvt {
     pub args: Vec<String>,
 }
 
-pub fn init() -> Result<Box<dyn Functions>, GlrnvimError> {
-    let exe_path = super::find_executable(URXVT_NAME)?;
+pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
+    let exe_path = super::exe_path(&config.exe_path, URXVT_NAME)?;
 
     Ok(Box::new(Urxvt {
         exe_path,

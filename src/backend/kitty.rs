@@ -13,8 +13,8 @@ struct Kitty {
     temp_file: Option<NamedTempFile>,
 }
 
-pub fn init() -> Result<Box<dyn Functions>, GlrnvimError> {
-    let exe_path = super::find_executable(KITTY_NAME)?;
+pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
+    let exe_path = super::exe_path(&config.exe_path, KITTY_NAME)?;
 
     Ok(Box::new(Kitty {
         exe_path,

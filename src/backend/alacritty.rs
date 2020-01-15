@@ -13,8 +13,8 @@ struct Alacritty {
     temp_file: Option<NamedTempFile>,
 }
 
-pub fn init() -> Result<Box<dyn Functions>, GlrnvimError> {
-    let exe_path = super::find_executable(ALACRITTY_NAME)?;
+pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
+    let exe_path = super::exe_path(&config.exe_path, ALACRITTY_NAME)?;
 
     Ok(Box::new(Alacritty {
         exe_path,
