@@ -4,8 +4,6 @@ extern crate serde_yaml;
 use serde::Deserialize;
 use std::path::PathBuf;
 
-const DEFAULT_FONT_SIZE: u8 = 12;
-
 #[derive(Debug, PartialEq, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Backend {
@@ -21,8 +19,11 @@ pub struct Config {
     pub backend: Option<Backend>,
     pub exe_path: Option<String>,
     #[serde(default)]
+    pub load_term_conf: bool,
+
+    #[serde(default)]
     pub fonts: Vec<String>,
-    #[serde(default = "default_font_size")]
+    #[serde(default)]
     pub font_size: u8,
 }
 
@@ -33,14 +34,10 @@ impl Default for Config {
             backend: None,
             exe_path: None,
             fonts: Vec::new(),
-            font_size: DEFAULT_FONT_SIZE,
+            font_size: 0,
+            load_term_conf: false,
         }
     }
-}
-
-#[allow(dead_code)]
-fn default_font_size() -> u8 {
-    DEFAULT_FONT_SIZE
 }
 
 pub fn parse(path: PathBuf, fork: bool) -> Config {

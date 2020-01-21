@@ -11,6 +11,7 @@ use std::env;
 use std::process::Command;
 
 pub const NVIM_NAME: &str = "nvim";
+const DEFAULT_FONT_SIZE: u8 = 12;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
@@ -51,13 +52,19 @@ fn parse_args() -> (Config, Vec<String>) {
         }
     }
 
-    let config = match dirs::config_dir() {
+    let mut config = match dirs::config_dir() {
         Some(mut dir) => {
             dir.push("glrnvim.yml");
             config::parse(dir, fork)
         }
         None => Config::default(),
     };
+    if !config.load_term_conf {
+        // Set our default configs if user doesn't use the terminal's conf.
+        if config.font_size == 0 {
+            config.font_size = DEFAULT_FONT_SIZE;
+        }
+    }
 
     (config, n_args)
 }

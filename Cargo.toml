@@ -5,12 +5,14 @@ authors = ["beeender <chenmulong@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+regex = "1"
 quale = "1.0"
 dirs = "1.0"
 tempfile = "3.1"
 # 1.0.98 doesn't compile under Mac
 serde = { version = "=1.0.97", features = ["derive"] }
 serde_yaml = "0.8"
+shellexpand = "1.1.1"
 
 [package.metadata.deb]
 maintainer = "beeender <chenmulong@gmail.com>"

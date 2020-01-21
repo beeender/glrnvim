@@ -5,6 +5,7 @@ use super::config::Config;
 use crate::config::Backend;
 use crate::error::GlrnvimError;
 use std::path::PathBuf;
+extern crate shellexpand;
 
 pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
@@ -80,4 +81,27 @@ fn find_executable(exe_name: &str) -> Result<PathBuf, GlrnvimError> {
         "'{}' executable cannot be found.",
         exe_name
     )))
+}
+
+fn find_term_conf_files(base_confs: &[String], priority_confs: &[String]) -> Vec<String> {
+    let mut ret: Vec<String> = Vec::new();
+
+    for path_str in base_confs {
+        let expanded_str = &String::from(shellexpand::full(path_str).unwrap_or_default());
+        let conf_path = std::path::Path::new(expanded_str);
+        if conf_path.exists() && conf_path.is_file() {
+            ret.push(expanded_str.to_owned());
+        }
+    }
+
+    for path_str in priority_confs {
+        let expanded_str = &String::from(shellexpand::full(path_str).unwrap_or_default());
+        let conf_path = std::path::Path::new(expanded_str);
+        if conf_path.exists() && conf_path.is_file() {
+            ret.push(expanded_str.to_owned());
+            break;
+        }
+    }
+
+    return ret;
 }

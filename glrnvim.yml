@@ -19,3 +19,10 @@
 # The font size to be used.
 #
 #font_size: 12
+
+# Set to true if the terminal's default configuration should be loaded
+# first. Other glrnvim configurations will overwrite the terminal settings
+# if they are set in glrnvim.yml.
+# urxvt is not impacted by this setting. It always load resources according
+# to the defined orders.
+#load_term_conf: false
