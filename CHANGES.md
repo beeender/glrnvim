@@ -1,6 +1,10 @@
 CHANGES
 --------
 
+1.1.0
+
+- Add `load_term_conf` option for loading terminal's default configurations before applying glrnvim's settings to terminal. (#8)
+
 1.0.0
 
 - **BREAKING** Config file format changed.
