@@ -37,7 +37,7 @@ Install `glrnvim` from the AUR.
 cargo install cargo-deb
 ```
 
-- Build and install the `deb` package system-wide.
+- Clone the project. Then build and install the `deb` package system-wide by running the following command from the project's root directory.
 
 ```
 cargo deb --install
