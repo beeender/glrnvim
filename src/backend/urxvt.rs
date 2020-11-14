@@ -52,11 +52,7 @@ impl Functions for Urxvt {
         command.args(&self.args);
         command.arg("-e");
         command.arg(NVIM_NAME);
-
-        // Enable 24-bits colors
-        command.arg("+set termguicolors");
-        // Set title string
-        command.arg("+set title");
+        command.args(super::COMMON_ARGS);
         command
     }
 }
