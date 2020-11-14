@@ -1,6 +1,10 @@
 CHANGES
 --------
 
+1.1.1
+
+- Add `g:glrnvim_gui=1` to the VIML environment. (#20)
+
 1.1.0
 
 - Add `load_term_conf` option for loading terminal's default configurations before applying glrnvim's settings to terminal. (#8)

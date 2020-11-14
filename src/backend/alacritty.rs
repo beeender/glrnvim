@@ -134,11 +134,8 @@ impl Functions for Alacritty {
 
         command.arg("-e");
         command.arg(NVIM_NAME);
+        command.args(super::COMMON_ARGS);
 
-        // Enable 24-bits colors
-        command.arg("+set termguicolors");
-        // Set title string
-        command.arg("+set title");
         command
     }
 }

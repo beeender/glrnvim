@@ -11,6 +11,12 @@ pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
 }
 
+const COMMON_ARGS: &'static [&'static str] = &[
+    "+set termguicolors", // Enable 24-bits colors
+    "+set title", // Set title string
+    "--cmd", "let g:glrnvim_gui=1",
+];
+
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
     match &config.backend {
         Some(backend) => match backend {

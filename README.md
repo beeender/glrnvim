@@ -70,6 +70,14 @@ Modify [example config](https://github.com/beeender/glrnvim/blob/master/glrnvim.
 git config --global core.editor "glrnvim --nofork"
 ```
 
+### Check if it is running in a glrnvim instance in vim srcipt
+
+```viml
+if exists('g:glrnvim_gui')
+    "do something
+endif
+```
+
 ## Known Issues:
 
 _Color scheme doesn't work well with urxvt backend._
