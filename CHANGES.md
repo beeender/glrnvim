@@ -4,6 +4,7 @@ CHANGES
 1.1.1
 
 - Add `g:glrnvim_gui=1` to the VIML environment. (#20)
+- Fix windows build by using `which` instead of `quale`. (#19)
 
 1.1.0
 

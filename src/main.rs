@@ -1,12 +1,10 @@
 extern crate dirs;
-extern crate quale;
 
 mod backend;
 mod config;
 mod error;
 
 use config::*;
-use quale::which;
 use std::env;
 use std::process::Command;
 
@@ -26,7 +24,7 @@ fn prepare_env() {
 }
 
 fn check_nvim() {
-    if which(NVIM_NAME).is_none() {
+    if which::which(NVIM_NAME).is_err() {
         eprintln!("'{}' executable cannot be found.", NVIM_NAME);
         std::process::exit(-1);
     }
