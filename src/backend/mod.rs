@@ -50,18 +50,19 @@ fn exe_path(exe_path: &Option<String>, exe_name: &str) -> Result<PathBuf, Glrnvi
 
 #[cfg(not(target_os = "macos"))]
 fn find_executable(exe_name: &str) -> Result<PathBuf, GlrnvimError> {
-    match quale::which(exe_name) {
-        Some(p) => Ok(p),
-        None => Err(GlrnvimError::new(format!(
-            "'{}' executable cannot be found.",
-            exe_name
+    match which::which(exe_name) {
+        Ok(p) => Ok(p),
+        Err(e) => Err(GlrnvimError::new(format!(
+            "'{}' executable cannot be found. {}",
+            exe_name,
+            e
         ))),
     }
 }
 
 #[cfg(target_os = "macos")]
 fn find_executable(exe_name: &str) -> Result<PathBuf, GlrnvimError> {
-    if let Some(p) = quale::which(exe_name) {
+    if let Some(p) = which::which(exe_name) {
         return Ok(p);
     }
 

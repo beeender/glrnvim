@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 regex = "1"
-quale = "1.0"
+which = "4.0.2"
 dirs = "1.0"
 tempfile = "3.1"
 # 1.0.98 doesn't compile under Mac
