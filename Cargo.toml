@@ -11,7 +11,7 @@ dirs = "1.0"
 tempfile = "3.1"
 # 1.0.98 doesn't compile under Mac
 serde = { version = "=1.0.97", features = ["derive"] }
-serde_yaml = "0.8"
+serde_yaml = "0.8.14"
 shellexpand = "1.1.1"
 
 [package.metadata.deb]

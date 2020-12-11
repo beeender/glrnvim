@@ -5,6 +5,7 @@ CHANGES
 
 - Add `g:glrnvim_gui=1` to the VIML environment. (#20)
 - Fix windows build by using `which` instead of `quale`. (#19)
+- Fix `serde_yaml` panic which is caused by rust update. (#26)
 
 1.1.0
 
