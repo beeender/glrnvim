@@ -31,6 +31,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "ddrcode",
+      "name": "David de Rosier",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/700125?v=4",
+      "profile": "http://twitter.com/#!/ddrcode",
+      "contributions": [
+        "platform"
+      ]
     }
   ],
   "contributorsPerLine": 7,
