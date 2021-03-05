@@ -62,7 +62,7 @@ fn find_executable(exe_name: &str) -> Result<PathBuf, GlrnvimError> {
 
 #[cfg(target_os = "macos")]
 fn find_executable(exe_name: &str) -> Result<PathBuf, GlrnvimError> {
-    if let Some(p) = which::which(exe_name) {
+    if let Ok(p) = which::which(exe_name) {
         return Ok(p);
     }
 
