@@ -40,6 +40,15 @@
       "contributions": [
         "platform"
       ]
+    },
+    {
+      "login": "jandamm",
+      "name": "Jan Damm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5963139?v=4",
+      "profile": "http://jandamm.de",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
