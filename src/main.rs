@@ -1,4 +1,6 @@
 extern crate dirs;
+extern crate log;
+extern crate env_logger;
 
 mod backend;
 mod config;
@@ -19,7 +21,9 @@ fn prepare_env() {}
 #[cfg(target_os = "macos")]
 fn prepare_env() {
     // When starting from iTerm, these env vars could cause some display issues.
+    log::debug!("unset $TERM_PROGRAM");
     env::remove_var("TERM_PROGRAM");
+    log::debug!("unset $TERM_PROGRAM_VERSION");
     env::remove_var("TERM_PROGRAM_VERSION");
 }
 
@@ -117,6 +121,7 @@ fn show_help() {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    env_logger::init();
     check_nvim();
     let (config, n_args) = parse_args();
 
@@ -127,6 +132,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     command.args(&n_args);
 
     prepare_env();
+    log::debug!("Start command: {:?}", command);
     let mut child = command.spawn()?;
     if config.fork {
         std::process::exit(0);
