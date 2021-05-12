@@ -29,9 +29,7 @@ impl Wezterm {
             self.args.push("--config".to_string());
             fn_arg = String::from("font=require('wezterm').font_with_fallback({");
             for font in &config.fonts {
-                fn_arg.push('\"');
-                fn_arg.push_str(font);
-                fn_arg.push_str("\",");
+                fn_arg = fn_arg + "\"" + &font[..] + "\",";
             }
             fn_arg.push_str("})");
         }
