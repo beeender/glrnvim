@@ -10,6 +10,7 @@ pub enum Backend {
     Alacritty,
     Urxvt,
     Kitty,
+    Wezterm,
 }
 
 #[derive(Debug, PartialEq, Deserialize)]
