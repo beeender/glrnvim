@@ -4,6 +4,7 @@ use crate::error::GlrnvimError;
 use crate::NVIM_NAME;
 use std::io::Write;
 use std::path::PathBuf;
+use tempfile::NamedTempFile;
 
 pub const WEZTERM_NAME: &str = "wezterm";
 
@@ -40,9 +41,16 @@ impl Wezterm {
         }
         if config.font_size != 0 {
             self.args.push("--config".to_string());
-            self.args
-                .push(format!("font_size={}", config.font_size));
+            self.args.push(format!("font_size={}", config.font_size));
         }
+    }
+    fn create_conf_file() -> Option<NamedTempFile> {
+        let mut file = tempfile::NamedTempFile::new().unwrap();
+        writeln!(file, "return {{}}").unwrap();
+        file.flush().unwrap();
+
+        file.path();
+        Some(file)
     }
 }
 
@@ -53,11 +61,7 @@ impl Functions for Wezterm {
         command.args(&self.args);
         if !config.load_term_conf {
             command.arg("--config-file");
-            let mut file = tempfile::NamedTempFile::new().unwrap();
-            writeln!(file, "return {{}}").unwrap();
-            file.flush().unwrap();
-            file.path();
-            command.arg(Some(file).as_ref().unwrap().path());
+            command.arg(Wezterm::create_conf_file().unwrap().path());
         }
         command.arg("start");
         command.arg("--class");
