@@ -11,6 +11,7 @@ pub const WEZTERM_NAME: &str = "wezterm";
 struct Wezterm {
     exe_path: PathBuf,
     pub args: Vec<String>,
+    temp_file: Option<NamedTempFile>,
 }
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
@@ -19,6 +20,7 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
     Ok(Box::new(Wezterm {
         exe_path,
         args: vec![],
+        temp_file: None,
     }))
 }
 
@@ -41,13 +43,11 @@ impl Wezterm {
             self.args.push(format!("font_size={}", config.font_size));
         }
     }
-    fn create_conf_file() -> Option<NamedTempFile> {
+    fn create_conf_file(&mut self) {
         let mut file = tempfile::NamedTempFile::new().unwrap();
         writeln!(file, "return {{}}").unwrap();
         file.flush().unwrap();
-
-        file.path();
-        Some(file)
+        self.temp_file = Some(file);
     }
 }
 
@@ -57,8 +57,9 @@ impl Functions for Wezterm {
         let mut command = std::process::Command::new(self.exe_path.to_owned());
         command.args(&self.args);
         if !config.load_term_conf {
+            self.create_conf_file();
             command.arg("--config-file");
-            command.arg(Wezterm::create_conf_file().unwrap().path());
+            command.arg(self.temp_file.as_ref().unwrap().path());
         }
         command.arg("start");
         command.arg("--class");

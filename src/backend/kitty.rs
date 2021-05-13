@@ -54,7 +54,7 @@ impl Kitty {
     // $XDG_CONFIG_HOME/kitty/kitty.conf
     // ~/.config/kitty/kitty.conf,
     // $XDG_CONFIG_DIRS/kitty/kitty.conf
-    fn find_deafult_confs() -> Vec<String> {
+    fn find_default_confs() -> Vec<String> {
         let base_confs: [String; 1] = ["/etc/xdg/kitty/kitty.conf".to_string()];
         let pri_confs: [String; 4] = [
             "$KITTY_CONFIG_DIRECTORY/kitty.conf".to_string(),
@@ -72,7 +72,7 @@ impl Functions for Kitty {
         let mut command = std::process::Command::new(self.exe_path.to_owned());
 
         if config.load_term_conf {
-            let confs = Kitty::find_deafult_confs();
+            let confs = Kitty::find_default_confs();
             for conf in confs {
                 command.arg("--config");
                 command.arg(conf);
