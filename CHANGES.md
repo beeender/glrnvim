@@ -1,6 +1,10 @@
 CHANGES
 --------
 
+1.2.0
+
+- Add [wezterm](https://wezfurlong.org/wezterm/) support. (#40)
+
 1.1.1
 
 - Add `g:glrnvim_gui=1` to the VIML environment. (#20)
