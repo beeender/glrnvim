@@ -1,6 +1,6 @@
 glrnvim
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Build Status](https://travis-ci.com/beeender/glrnvim.svg?branch=master)](https://travis-ci.com/beeender/glrnvim)
 =======
@@ -98,6 +98,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/LasseWolter"><img src="https://avatars1.githubusercontent.com/u/29123172?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lasse Wolter</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=LasseWolter" title="Documentation">📖</a></td>
     <td align="center"><a href="http://twitter.com/#!/ddrcode"><img src="https://avatars1.githubusercontent.com/u/700125?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David de Rosier</b></sub></a><br /><a href="#platform-ddrcode" title="Packaging/porting to new platform">📦</a></td>
     <td align="center"><a href="http://jandamm.de"><img src="https://avatars.githubusercontent.com/u/5963139?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jan Damm</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=jandamm" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/p00f"><img src="https://avatars.githubusercontent.com/u/36493671?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chinmay Dalal</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=p00f" title="Code">💻</a></td>
   </tr>
 </table>
 
