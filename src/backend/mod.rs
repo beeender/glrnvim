@@ -1,6 +1,7 @@
 mod alacritty;
 mod kitty;
 mod urxvt;
+mod wezterm;
 use super::config::Config;
 use crate::config::Backend;
 use crate::error::GlrnvimError;
@@ -13,8 +14,9 @@ pub trait Functions {
 
 const COMMON_ARGS: &'static [&'static str] = &[
     "+set termguicolors", // Enable 24-bits colors
-    "+set title", // Set title string
-    "--cmd", "let g:glrnvim_gui=1",
+    "+set title",         // Set title string
+    "--cmd",
+    "let g:glrnvim_gui=1",
 ];
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
@@ -23,9 +25,10 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
             Backend::Alacritty => alacritty::init(config),
             Backend::Urxvt => urxvt::init(config),
             Backend::Kitty => kitty::init(config),
+            Backend::Wezterm => wezterm::init(config),
         },
         None => {
-            for init_func in &[alacritty::init, urxvt::init, kitty::init] {
+            for init_func in &[alacritty::init, urxvt::init, kitty::init, wezterm::init] {
                 match init_func(config) {
                     Ok(functions) => return Ok(functions),
                     Err(_) => {}
@@ -54,8 +57,7 @@ fn find_executable(exe_name: &str) -> Result<PathBuf, GlrnvimError> {
         Ok(p) => Ok(p),
         Err(e) => Err(GlrnvimError::new(format!(
             "'{}' executable cannot be found. {}",
-            exe_name,
-            e
+            exe_name, e
         ))),
     }
 }

@@ -10,6 +10,7 @@ pub enum Backend {
     Alacritty,
     Urxvt,
     Kitty,
+    Wezterm,
 }
 
 #[derive(Debug, PartialEq, Deserialize)]
@@ -50,7 +51,7 @@ pub fn parse(path: PathBuf, fork: bool) -> Config {
                 // Work around the empty yaml file issue.
                 // See https://github.com/dtolnay/serde-yaml/issues/86
                 if e.to_string() != "EOF while parsing a value" {
-                    panic!(e.to_string())
+                    panic!("{}", e.to_string())
                 }
                 Config::default()
             }
