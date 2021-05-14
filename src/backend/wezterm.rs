@@ -29,7 +29,7 @@ impl Wezterm {
         let mut fn_arg = String::from("");
         if !&config.fonts.is_empty() {
             self.args.push("--config".to_string());
-            fn_arg = String::from("font=require('wezterm').font_with_fallback({");
+            fn_arg = String::from("font = require('wezterm').font_with_fallback({");
             for font in &config.fonts {
                 fn_arg = format!("{} \"{}\",", fn_arg, font);
             }
@@ -42,6 +42,8 @@ impl Wezterm {
             self.args.push("--config".to_string());
             self.args.push(format!("font_size={}", config.font_size));
         }
+        self.args.push("--config".to_string());
+        self.args.push("enable_tab_bar = false".to_string());
     }
     fn create_conf_file(&mut self) {
         let mut file = tempfile::NamedTempFile::new().unwrap();
