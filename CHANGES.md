@@ -1,6 +1,10 @@
 CHANGES
 --------
 
+Next Release
+
+- The config path is changed from `$HOME/config/glrnvim.yml` to `$HOME/config/glrnvim/config.yml`. The old config path is still supported with a lower priority.
+
 1.2.0
 
 - Add [wezterm](https://wezfurlong.org/wezterm/) support. (#40)

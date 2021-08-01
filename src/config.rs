@@ -41,36 +41,36 @@ impl Default for Config {
     }
 }
 
-pub fn parse(path: PathBuf, fork: bool) -> Config {
-    let mut config = if path.exists() {
-        let file = std::fs::File::open(path).unwrap();
-        let reader = std::io::BufReader::new(file);
-        match serde_yaml::from_reader(reader) {
-            Ok(c) => c,
-            Err(e) => {
-                // Work around the empty yaml file issue.
-                // See https://github.com/dtolnay/serde-yaml/issues/86
-                if e.to_string() != "EOF while parsing a value" {
-                    panic!("{}", e.to_string())
-                }
-                Config::default()
+pub fn parse(path: PathBuf) -> Config {
+    let file = std::fs::File::open(path).unwrap();
+    let reader = std::io::BufReader::new(file);
+    let mut config = match serde_yaml::from_reader(reader) {
+        Ok(c) => c,
+        Err(e) => {
+            // Work around the empty yaml file issue.
+            // See https://github.com/dtolnay/serde-yaml/issues/86
+            if e.to_string() != "EOF while parsing a value" {
+                panic!("{}", e.to_string())
             }
+            Config::default()
         }
-    } else {
-        Config::default()
     };
 
     if config.backend.is_none() && config.exe_path.is_some() {
         panic!("exe_path requires a backend key")
-    } else {
-        config.fonts = config
-            .fonts
-            .into_iter()
-            .filter(|s| !s.is_empty() && s != "~")
-            .collect::<Vec<_>>();
-        config.fork = fork;
     }
 
+    config.fonts = config
+        .fonts
+        .into_iter()
+        .filter(|s| !s.is_empty() && s != "~")
+        .collect::<Vec<_>>();
+
+    config
+}
+
+pub fn complete(mut config: Config, fork: bool) -> Config {
+    config.fork = fork;
     config
 }
 
@@ -115,39 +115,41 @@ fonts:
 "#,
             )
             .path,
-            true,
         );
-        assert!(config.fonts.len() == 2);
-        assert!(config.fonts == vec!["MonoAbc ff", "ac"]);
+        assert_eq!(config.fonts.len(), 2);
+        assert_eq!(config.fonts, vec!["MonoAbc ff", "ac"]);
     }
 
     #[test]
     fn test_parse_font_size() {
-        let config = parse(make_cfg_file("font_size: 15").path, true);
-        assert!(config.font_size == 15);
+        let config = parse(make_cfg_file("font_size: 15").path);
+        assert_eq!(config.font_size, 15);
         assert!(config.fonts.is_empty());
     }
 
     #[test]
     fn test_parse_empty_config() {
-        let config = parse(make_cfg_file("").path, false);
-        assert!(config == Config::default());
+        let config = parse(make_cfg_file("").path);
+        assert_eq!(config, Config::default());
+    }
+
+    #[test]
+    #[should_panic(expected = "No such file or directory")]
+    fn test_parse_non_exist_config() {
+        parse(PathBuf::from("/non/exists"));
     }
 
     #[test]
     fn test_parse_backend_and_exe_path() {
-        let config = parse(
-            make_cfg_file("backend: alacritty\nexe_path: /path/to/alacritty").path,
-            true,
-        );
-        assert!(config.backend == Some(Backend::Alacritty));
-        assert!(config.exe_path == Some("/path/to/alacritty".to_string()));
+        let config = parse(make_cfg_file("backend: alacritty\nexe_path: /path/to/alacritty").path);
+        assert_eq!(config.backend, Some(Backend::Alacritty));
+        assert_eq!(config.exe_path, Some("/path/to/alacritty".to_string()));
     }
 
     #[test]
     #[should_panic(expected = "exe_path requires a backend key")]
     fn test_parse_exe_path_without_backend() {
-        parse(make_cfg_file("exe_path: /path/to/kitty").path, true);
+        parse(make_cfg_file("exe_path: /path/to/kitty").path);
     }
 
     #[test]
@@ -155,6 +157,6 @@ fonts:
         expected = "font_size: invalid type: string \"sadfa\", expected u8 at line 1 column 12"
     )]
     fn test_parse_invalid_font_size() {
-        parse(make_cfg_file("font_size: sadfa").path, true);
+        parse(make_cfg_file("font_size: sadfa").path);
     }
 }

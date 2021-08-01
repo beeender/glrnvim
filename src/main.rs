@@ -1,6 +1,6 @@
 extern crate dirs;
-extern crate log;
 extern crate env_logger;
+extern crate log;
 
 mod backend;
 mod config;
@@ -54,13 +54,29 @@ fn parse_args() -> (Config, Vec<String>) {
         }
     }
 
-    let mut config = match dirs::config_dir() {
-        Some(mut dir) => {
-            dir.push("glrnvim.yml");
-            config::parse(dir, fork)
+    let mut config: Config = match dirs::config_dir() {
+        Some(conf_dir) => {
+            let mut new_conf_path = conf_dir.clone();
+            new_conf_path.push("glrnvim");
+            new_conf_path.push("config.yml");
+
+            let mut old_conf_path = conf_dir.clone();
+            old_conf_path.push("glrnvim.yml");
+
+            if new_conf_path.exists() {
+                log::debug!("Use config file: '{:?}'.", new_conf_path);
+                config::parse(new_conf_path)
+            } else if old_conf_path.exists() {
+                log::debug!("Use config file: '{:?}'.", old_conf_path);
+                config::parse(old_conf_path)
+            } else {
+                log::debug!("No config file found. Use default config.");
+                Config::default()
+            }
         }
         None => Config::default(),
     };
+    config = config::complete(config, fork);
     if !config.load_term_conf {
         // Set our default configs if user doesn't use the terminal's conf.
         if config.font_size == 0 {
