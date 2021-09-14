@@ -12,7 +12,7 @@ pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
 }
 
-const COMMON_ARGS: &'static [&'static str] = &[
+const COMMON_ARGS: &[&str] = &[
     "+set termguicolors", // Enable 24-bits colors
     "+set title",         // Set title string
     "--cmd",
@@ -29,15 +29,14 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
         },
         None => {
             for init_func in &[alacritty::init, urxvt::init, kitty::init, wezterm::init] {
-                match init_func(config) {
-                    Ok(functions) => return Ok(functions),
-                    Err(_) => {}
+                if let Ok(functions) = init_func(config) {
+                    return Ok(functions);
                 }
             }
 
-            Err(GlrnvimError::new(format!(
-                "None of the suppported terminals can be found.",
-            )))
+            Err(GlrnvimError::new(
+                "None of the suppported terminals can be found.".to_string(),
+            ))
         }
     }
 }
@@ -112,5 +111,5 @@ fn find_term_conf_files(base_confs: &[String], priority_confs: &[String]) -> Vec
         }
     }
 
-    return ret;
+    ret
 }

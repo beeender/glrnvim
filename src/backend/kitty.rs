@@ -61,14 +61,14 @@ impl Kitty {
             "$HOME/.config/kitty/kitty.conf".to_string(),
             "$XDG_CONFIG_DIRS/kitty/kitty.conf".to_string(),
         ];
-        return super::find_term_conf_files(&base_confs, &pri_confs);
+        super::find_term_conf_files(&base_confs, &pri_confs)
     }
 }
 
 impl Functions for Kitty {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
         self.create_conf_file(config);
-        
+
         let mut command = std::process::Command::new(self.exe_path.to_owned());
 
         if config.load_term_conf {
