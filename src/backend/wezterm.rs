@@ -1,7 +1,6 @@
 use super::Functions;
 use crate::config::Config;
 use crate::error::GlrnvimError;
-use crate::NVIM_NAME;
 use std::io::Write;
 use std::path::PathBuf;
 use tempfile::NamedTempFile;
@@ -15,7 +14,7 @@ struct Wezterm {
 }
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
-    let exe_path = super::exe_path(&config.exe_path, WEZTERM_NAME)?;
+    let exe_path = super::exe_path(&config.term_exe_path, WEZTERM_NAME)?;
 
     Ok(Box::new(Wezterm {
         exe_path,
@@ -67,7 +66,7 @@ impl Functions for Wezterm {
         command.arg("--class");
         command.arg("glrnvim");
         command.arg("--");
-        command.arg(NVIM_NAME);
+        command.arg(&config.nvim_exe_path);
         command.args(super::COMMON_ARGS);
         command
     }

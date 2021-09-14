@@ -1,7 +1,6 @@
 use super::Functions;
 use crate::config::Config;
 use crate::error::GlrnvimError;
-use crate::NVIM_NAME;
 use std::io::Write;
 use std::path::PathBuf;
 use tempfile::NamedTempFile;
@@ -14,7 +13,7 @@ struct Kitty {
 }
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
-    let exe_path = super::exe_path(&config.exe_path, KITTY_NAME)?;
+    let exe_path = super::exe_path(&config.term_exe_path, KITTY_NAME)?;
 
     Ok(Box::new(Kitty {
         exe_path,
@@ -35,7 +34,7 @@ impl Kitty {
             writeln!(file, "font_size {}", config.font_size).unwrap();
         }
 
-        if config.load_term_conf {
+        if !config.load_term_conf {
             writeln!(file, "clear_all_shortcuts yes").unwrap();
         }
         // Using no_op to bypass ctrl-z seems not working.
@@ -69,6 +68,7 @@ impl Kitty {
 impl Functions for Kitty {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
         self.create_conf_file(config);
+        
         let mut command = std::process::Command::new(self.exe_path.to_owned());
 
         if config.load_term_conf {
@@ -87,7 +87,7 @@ impl Functions for Kitty {
             command.arg("glrnvim");
         }
 
-        command.arg(NVIM_NAME);
+        command.arg(&config.nvim_exe_path);
         command.args(super::COMMON_ARGS);
 
         command

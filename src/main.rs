@@ -10,7 +10,6 @@ use config::*;
 use std::env;
 use std::process::Command;
 
-pub const NVIM_NAME: &str = "nvim";
 const DEFAULT_FONT_SIZE: u8 = 12;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
@@ -27,9 +26,9 @@ fn prepare_env() {
     env::remove_var("TERM_PROGRAM_VERSION");
 }
 
-fn check_nvim() {
-    if which::which(NVIM_NAME).is_err() {
-        eprintln!("'{}' executable cannot be found.", NVIM_NAME);
+fn check_nvim(vim_exe_path: &str) {
+    if which::which(vim_exe_path).is_err() {
+        eprintln!("'{}' executable cannot be found.", vim_exe_path);
         std::process::exit(-1);
     }
 }
@@ -138,8 +137,8 @@ fn show_help() {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
-    check_nvim();
     let (config, n_args) = parse_args();
+    check_nvim(&config.nvim_exe_path);
 
     let mut backend_functions = backend::init(&config)?;
 

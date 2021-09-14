@@ -1,7 +1,6 @@
 use super::Functions;
 use crate::config::Config;
 use crate::error::GlrnvimError;
-use crate::NVIM_NAME;
 use regex::Regex;
 use std::fs;
 use std::path::PathBuf;
@@ -16,7 +15,7 @@ struct Alacritty {
 }
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
-    let exe_path = super::exe_path(&config.exe_path, ALACRITTY_NAME)?;
+    let exe_path = super::exe_path(&config.term_exe_path, ALACRITTY_NAME)?;
 
     Ok(Box::new(Alacritty {
         exe_path,
@@ -133,7 +132,7 @@ impl Functions for Alacritty {
         }
 
         command.arg("-e");
-        command.arg(NVIM_NAME);
+        command.arg(&config.nvim_exe_path);
         command.args(super::COMMON_ARGS);
 
         command
@@ -152,7 +151,9 @@ mod tests {
         let conf = config::Config {
             fork: false,
             backend: Some(config::Backend::Alacritty),
+            term_exe_path: None,
             exe_path: None,
+            nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
             fonts: vec!["test_font".to_string()],
             load_term_conf: false,
@@ -194,7 +195,9 @@ key_bindings:
         let conf = config::Config {
             fork: false,
             backend: Some(config::Backend::Alacritty),
+            term_exe_path: None,
             exe_path: None,
+            nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
             fonts: vec!["test_font".to_string()],
             load_term_conf: false,
@@ -236,7 +239,9 @@ key_bindings:
         let conf = config::Config {
             fork: false,
             backend: Some(config::Backend::Alacritty),
+            term_exe_path: None,
             exe_path: None,
+            nvim_exe_path: "nvim".to_owned(),
             font_size: 0,
             fonts: vec![],
             load_term_conf: false,
@@ -281,7 +286,9 @@ key_bindings:
         let conf = config::Config {
             fork: false,
             backend: Some(config::Backend::Alacritty),
+            term_exe_path: None,
             exe_path: None,
+            nvim_exe_path: "nvim".to_owned(),
             font_size: 0,
             fonts: vec![],
             load_term_conf: false,
