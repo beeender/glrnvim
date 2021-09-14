@@ -4,6 +4,8 @@ extern crate serde_yaml;
 use serde::Deserialize;
 use std::path::PathBuf;
 
+const NVIM_NAME: &str = "nvim";
+
 #[derive(Debug, PartialEq, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Backend {
@@ -18,10 +20,13 @@ pub struct Config {
     #[serde(skip)]
     pub fork: bool,
     pub backend: Option<Backend>,
+    // TODO: this config option is deprecated, will be removed in the future
     pub exe_path: Option<String>,
+    pub term_exe_path: Option<String>,
+    #[serde(default)]
+    pub nvim_exe_path: String,
     #[serde(default)]
     pub load_term_conf: bool,
-
     #[serde(default)]
     pub fonts: Vec<String>,
     #[serde(default)]
@@ -33,7 +38,9 @@ impl Default for Config {
         Self {
             fork: false,
             backend: None,
+            nvim_exe_path: NVIM_NAME.to_owned(),
             exe_path: None,
+            term_exe_path: None,
             fonts: Vec::new(),
             font_size: 0,
             load_term_conf: false,
@@ -56,8 +63,17 @@ pub fn parse(path: PathBuf) -> Config {
         }
     };
 
-    if config.backend.is_none() && config.exe_path.is_some() {
-        panic!("exe_path requires a backend key")
+    if config.backend.is_none() && config.term_exe_path.is_some() {
+        panic!("term_exe_path requires a backend key")
+    }
+
+    if config.nvim_exe_path == "" {
+        config.nvim_exe_path = NVIM_NAME.to_owned()
+    }
+
+    // TODO: this config option is deprecated, will be removed in the future
+    if config.exe_path.is_some() {
+        config.term_exe_path = config.exe_path.clone()
     }
 
     config.fonts = config
@@ -140,16 +156,23 @@ fonts:
     }
 
     #[test]
-    fn test_parse_backend_and_exe_path() {
+    fn test_parse_backend_and_term_exe_path() {
+        let config = parse(make_cfg_file("backend: alacritty\nterm_exe_path: /path/to/alacritty").path);
+        assert_eq!(config.backend, Some(Backend::Alacritty));
+        assert_eq!(config.term_exe_path, Some("/path/to/alacritty".to_string()));
+    }
+
+    #[test]
+    fn test_parse_backend_and_deprecated_exe_path() {
         let config = parse(make_cfg_file("backend: alacritty\nexe_path: /path/to/alacritty").path);
         assert_eq!(config.backend, Some(Backend::Alacritty));
-        assert_eq!(config.exe_path, Some("/path/to/alacritty".to_string()));
+        assert_eq!(config.term_exe_path, Some("/path/to/alacritty".to_string()));
     }
 
     #[test]
     #[should_panic(expected = "exe_path requires a backend key")]
     fn test_parse_exe_path_without_backend() {
-        parse(make_cfg_file("exe_path: /path/to/kitty").path);
+        parse(make_cfg_file("term_exe_path: /path/to/kitty").path);
     }
 
     #[test]

@@ -2,11 +2,16 @@
 
 # Choose the backend terminal to run neovim in.
 # Current supported terminals: alacritty, urxvt, kitty.
-#
 #backend: urxvt
+
 # path to backend executable file
 # NOTE: requires a backend key
-#exe_path: /path/to/urxvt
+# NOTE: old key exe_path is now deprecated but can still be used
+#term_exe_path: /path/to/urxvt
+
+# Specify the Neovim executable path.
+# NOTE: nvim will be used if not specified
+#nvim_exec_path: /path/to/nvim
 
 # The fonts to be used. Multi fonts can be supplied.
 # The first one will be set as the major font. Others will be set as

@@ -3,6 +3,9 @@ name = "glrnvim"
 version = "1.2.0"
 authors = ["beeender <chenmulong@gmail.com>"]
 edition = "2018"
+description = "glrnvim combines OpenGL (possibly), Rust and NeoVIM together, to make the fastest, simplest neovim GUI."
+readme = "README.md"
+license = "GPL-3.0"
 
 [dependencies]
 regex = "1"

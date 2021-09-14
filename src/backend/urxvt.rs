@@ -1,7 +1,6 @@
 use super::Functions;
 use crate::config::Config;
 use crate::error::GlrnvimError;
-use crate::NVIM_NAME;
 use std::path::PathBuf;
 
 pub const URXVT_NAME: &str = "urxvt";
@@ -12,7 +11,7 @@ struct Urxvt {
 }
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
-    let exe_path = super::exe_path(&config.exe_path, URXVT_NAME)?;
+    let exe_path = super::exe_path(&config.term_exe_path, URXVT_NAME)?;
 
     Ok(Box::new(Urxvt {
         exe_path,
@@ -51,7 +50,7 @@ impl Functions for Urxvt {
         command.arg("builtin-string:");
         command.args(&self.args);
         command.arg("-e");
-        command.arg(NVIM_NAME);
+        command.arg(&config.nvim_exe_path);
         command.args(super::COMMON_ARGS);
         command
     }
