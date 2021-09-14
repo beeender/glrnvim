@@ -12,7 +12,7 @@ use std::process::Command;
 
 const DEFAULT_FONT_SIZE: u8 = 12;
 
-const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg(not(target_os = "macos"))]
 fn prepare_env() {}
@@ -38,8 +38,7 @@ fn parse_args() -> (Config, Vec<String>) {
     let mut n_args: Vec<String> = Vec::new();
     let mut fork: bool = true;
 
-    for i in 1..args.len() {
-        let arg = &args[i];
+    for arg in args.iter().skip(1) {
         if arg.starts_with("-h") || arg.starts_with("--help") {
             show_help();
             std::process::exit(0);
@@ -59,7 +58,7 @@ fn parse_args() -> (Config, Vec<String>) {
             new_conf_path.push("glrnvim");
             new_conf_path.push("config.yml");
 
-            let mut old_conf_path = conf_dir.clone();
+            let mut old_conf_path = conf_dir;
             old_conf_path.push("glrnvim.yml");
 
             if new_conf_path.exists() {

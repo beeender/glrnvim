@@ -46,15 +46,10 @@ impl Alacritty {
         // Set the font
         if !config.fonts.is_empty() {
             let mut normal_mapping = serde_yaml::Mapping::new();
-            for font in &config.fonts {
-                normal_mapping.insert(
-                    serde_yaml::to_value("family").unwrap(),
-                    serde_yaml::to_value(font).unwrap(),
-                );
-                // TODO: Alacritty doesn't support fallback font well.
-                // See https://github.com/jwilm/alacritty/issues/957
-                break;
-            }
+            normal_mapping.insert(
+                serde_yaml::to_value("family").unwrap(),
+                serde_yaml::to_value(&config.fonts.first()).unwrap(),
+            );
             font_mapping.insert(
                 serde_yaml::to_value("normal").unwrap(),
                 serde_yaml::to_value(normal_mapping).unwrap(),
@@ -98,7 +93,7 @@ impl Alacritty {
             "$XDG_CONFIG_DIRS/alacritty/alacritty.yml".to_string(),
         ];
         let confs = super::find_term_conf_files(&base_confs, &pri_confs);
-        if confs.len() > 0 {
+        if !confs.is_empty() {
             let path = confs[0].to_owned();
             let file = std::fs::File::open(path).unwrap();
             let reader = std::io::BufReader::new(file);

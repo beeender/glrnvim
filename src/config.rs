@@ -67,7 +67,7 @@ pub fn parse(path: PathBuf) -> Config {
         panic!("term_exe_path requires a backend key")
     }
 
-    if config.nvim_exe_path == "" {
+    if config.nvim_exe_path.is_empty() {
         config.nvim_exe_path = NVIM_NAME.to_owned()
     }
 
@@ -157,7 +157,8 @@ fonts:
 
     #[test]
     fn test_parse_backend_and_term_exe_path() {
-        let config = parse(make_cfg_file("backend: alacritty\nterm_exe_path: /path/to/alacritty").path);
+        let config =
+            parse(make_cfg_file("backend: alacritty\nterm_exe_path: /path/to/alacritty").path);
         assert_eq!(config.backend, Some(Backend::Alacritty));
         assert_eq!(config.term_exe_path, Some("/path/to/alacritty".to_string()));
     }
