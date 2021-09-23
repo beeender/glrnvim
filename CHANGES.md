@@ -3,7 +3,10 @@ CHANGES
 
 Next Release
 
-- The config path is changed from `$HOME/config/glrnvim.yml` to `$HOME/config/glrnvim/config.yml`. The old config path is still supported with a lower priority.
+1.3.0
+
+- [Deprecated] The config path is changed from `$HOME/config/glrnvim.yml` to `$HOME/config/glrnvim/config.yml`. The old config path is still supported with a lower priority.
+- [Deprecated] Allow to specify nvim path using `nvim_exe_path` config option. Deprecate `exe_path` while letting it still work with a lower priority.
 
 1.2.0
 

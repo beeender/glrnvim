@@ -59,8 +59,8 @@ Not difficult, just try.
 
 Modify [example config](https://github.com/beeender/glrnvim/blob/master/glrnvim.yml) and copy it to your `XDG_CONFIG_HOME` directory.
 
-- For Linux: `$HOME/.config/glrnvim.yml`
-- For MacOS: `$HOME/Library/Preferences/glrnvim.yml`
+- For Linux: `$HOME/.config/glrnvim/config.yml`
+- For MacOS: `$HOME/Library/Preferences/glrnvim/config.yml`
 
 ## Tips
 
