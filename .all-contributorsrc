@@ -58,6 +58,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "crisidev",
+      "name": "Matteo Bigoi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1781140?v=4",
+      "profile": "https://crisidev.org/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
