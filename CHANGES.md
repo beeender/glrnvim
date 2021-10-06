@@ -4,6 +4,7 @@ CHANGES
 Next Release
 
 - Fix nvim start args for Windows. (#45)
+- Show the config path hint in `help`.
 
 1.3.0
 

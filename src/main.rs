@@ -130,8 +130,18 @@ fn show_help() {
         println!("{}", line);
     }
 
-    println!("\nConfig file: $HOME/.config/glrnvim.yml");
-    println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
+    match dirs::config_dir() {
+        Some(conf_dir) => {
+            let mut conf_path = conf_dir.clone();
+            conf_path.push("glrnvim");
+            conf_path.push("config.yml");
+            println!("\nConfig file: {}", conf_path.display().to_string());
+            println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
+        }
+        None => {
+            println!("\nConfig file: Cannot identify the current config directory. No config file can be loaded.");
+        }
+    };
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
