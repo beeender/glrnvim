@@ -3,6 +3,8 @@ CHANGES
 
 Next Release
 
+- Fix nvim start args for Windows. (#45)
+
 1.3.0
 
 - [Deprecated] The config path is changed from `$HOME/config/glrnvim.yml` to `$HOME/config/glrnvim/config.yml`. The old config path is still supported with a lower priority.
