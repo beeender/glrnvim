@@ -45,22 +45,17 @@ cargo deb --install
 
 ## Build
 
-### Linux & macOS
-
 ```sh
 cargo build
 ```
 
-## Windows
-
-Not difficult, just try.
-
 ## Configuration
 
-Modify [example config](https://github.com/beeender/glrnvim/blob/master/glrnvim.yml) and copy it to your `XDG_CONFIG_HOME` directory.
+Modify [example config](https://github.com/beeender/glrnvim/blob/master/config.yml) and copy it to your `XDG_CONFIG_HOME` directory.
 
 - For Linux: `$HOME/.config/glrnvim/config.yml`
 - For MacOS: `$HOME/Library/Preferences/glrnvim/config.yml`
+- For Windows: `{FOLDERID_RoamingAppData}` (`C:\Users\Alice\AppData\Roaming\glrnvim\config.yml`)
 
 ## Tips
 

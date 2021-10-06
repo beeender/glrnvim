@@ -11,7 +11,8 @@
 
 # Specify the Neovim executable path.
 # NOTE: nvim will be used if not specified
-#nvim_exec_path: /path/to/nvim
+# NOTE: For windows, e.g.: C:\tools\neovim\Neovim\bin\nvim.exe
+#nvim_exe_path: /path/to/nvim
 
 # The fonts to be used. Multi fonts can be supplied.
 # The first one will be set as the major font. Others will be set as
@@ -27,7 +28,7 @@
 
 # Set to true if the terminal's default configuration should be loaded
 # first. Other glrnvim configurations will overwrite the terminal settings
-# if they are set in glrnvim.yml.
+# if they are set in config.yml.
 # urxvt is not impacted by this setting. It always load resources according
 # to the defined orders.
 #load_term_conf: false
