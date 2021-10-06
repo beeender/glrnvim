@@ -43,7 +43,7 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
             }
 
             Err(GlrnvimError::new(
-                "None of the suppported terminals can be found.".to_string(),
+                "None of the supported terminals can be found.".to_string(),
             ))
         }
     }
