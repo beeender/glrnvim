@@ -12,11 +12,19 @@ pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
 }
 
+#[cfg(not(target_os = "windows"))]
 const COMMON_ARGS: &[&str] = &[
     "+set termguicolors", // Enable 24-bits colors
     "+set title",         // Set title string
     "--cmd",
     "let g:glrnvim_gui=1",
+];
+#[cfg(target_os = "windows")]
+const COMMON_ARGS: &[&str] = &[
+    "\"+set termguicolors\"", // Enable 24-bits colors
+    "\"+set title\"",         // Set title string
+    "\"--cmd\"",
+    "\"let g:glrnvim_gui=1\"",
 ];
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
