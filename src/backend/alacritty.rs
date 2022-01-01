@@ -3,9 +3,14 @@ use crate::config::Config;
 use crate::error::GlrnvimError;
 use regex::Regex;
 use std::fs;
+use std::ffi::OsStr;
 use std::path::PathBuf;
+use std::path::Path;
+use sysinfo::{Pid, ProcessExt, Signal, System, SystemExt};
 use tempfile::NamedTempFile;
+use std::{thread, time};
 extern crate serde_yaml;
+extern crate log;
 
 pub const ALACRITTY_NAME: &str = "alacritty";
 
@@ -131,6 +136,44 @@ impl Functions for Alacritty {
         command.args(super::COMMON_ARGS);
 
         command
+    }
+
+    // To work around the neovim window size problem while starting.
+    // See https://github.com/neovim/neovim/issues/11330
+    #[cfg(target_os = "linux")]
+    fn post_start(&mut self, config: &Config, term_pid: Pid) {
+        let proc_name = match Path::new(&config.nvim_exe_path).file_name().and_then(OsStr::to_str) {
+            None => {
+                log::warn!("Cannot identify executable name from '{}'", config.nvim_exe_path);
+                return;
+            }
+            Some (name) => {
+                name
+            }
+        };
+
+        let mut count = 0u32;
+        let ten_millis = time::Duration::from_millis(10);
+        loop {
+            count += 1;
+            let s = System::new_all();
+            for process in s.process_by_name(proc_name) {
+                match process.parent() {
+                    None => {}
+                    Some(ppid) => {
+                        if ppid == term_pid {
+                            process.kill_with(Signal::Winch);
+                            return
+                        }
+                    }
+                }
+            }
+            if count == 10 {
+                log::warn!("Failed to try resizing the neovim window");
+                break
+            }
+            thread::sleep(ten_millis);
+        }
     }
 }
 
