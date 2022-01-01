@@ -213,7 +213,8 @@ font:
 key_bindings:
   - key: Z
     mods: Control
-    action: None"#;
+    action: None
+"#;
         assert_eq!(result.unwrap_or_default(), expected)
     }
 
@@ -257,7 +258,8 @@ font:
 key_bindings:
   - key: Z
     mods: Control
-    action: None"#;
+    action: None
+"#;
         assert_eq!(result.unwrap_or_default(), expected)
     }
 
@@ -299,7 +301,8 @@ font:
 key_bindings:
   - key: Z
     mods: Control
-    action: None"#;
+    action: None
+"#;
         assert_eq!(result.unwrap_or_default(), expected)
     }
 
@@ -343,11 +346,12 @@ key_bindings:
         let expected = r#"---
 colors:
   primary:
-    background: '0x424242'
+    background: "0x424242"
 key_bindings:
   - key: Z
     mods: Control
-    action: None"#;
+    action: None
+"#;
         assert_eq!(result.unwrap_or_default(), expected)
     }
 }
