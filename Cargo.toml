@@ -1,6 +1,6 @@
 [package]
 name = "glrnvim"
-version = "1.3.0"
+version = "1.3.1"
 authors = ["beeender <chenmulong@gmail.com>"]
 edition = "2018"
 description = "glrnvim combines OpenGL (possibly), Rust and NeoVIM together, to make the fastest, simplest neovim GUI."
