@@ -18,6 +18,7 @@ serde_yaml = "0.8.14"
 shellexpand = "1.1.1"
 log = "0.4.14"
 env_logger = "0.8.3"
+sysinfo = "0.22.4"
 
 [package.metadata.deb]
 maintainer = "beeender <chenmulong@gmail.com>"

@@ -5,6 +5,7 @@ Next Release
 
 - Fix nvim start args for Windows. (#45)
 - Show the config path hint in `help`.
+- Fix nvim resizing problem with alacritty at the star time. (#52)
 
 1.3.0
 

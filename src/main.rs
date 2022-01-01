@@ -9,6 +9,8 @@ mod error;
 use config::*;
 use std::env;
 use std::process::Command;
+use sysinfo::Pid;
+
 
 const DEFAULT_FONT_SIZE: u8 = 12;
 
@@ -158,6 +160,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     prepare_env();
     log::debug!("Start command: {:?}", command);
     let mut child = command.spawn()?;
+
+    backend_functions.post_start(&config, child.id() as Pid);
+
     if config.fork {
         std::process::exit(0);
     } else {

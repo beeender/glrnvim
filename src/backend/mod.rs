@@ -6,10 +6,14 @@ use super::config::Config;
 use crate::config::Backend;
 use crate::error::GlrnvimError;
 use std::path::PathBuf;
+use sysinfo::Pid;
+
 extern crate shellexpand;
 
 pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
+    fn post_start(&mut self, _config: &Config, _term_pid: Pid) {
+    }
 }
 
 #[cfg(not(target_os = "windows"))]
