@@ -1,7 +1,7 @@
 # vim:fileencoding=utf-8:ft=yaml
 
 # Choose the backend terminal to run neovim in.
-# Current supported terminals: alacritty, urxvt, kitty.
+# Current supported terminals: alacritty, urxvt, kitty, wezterm.
 #backend: urxvt
 
 # path to backend executable file
