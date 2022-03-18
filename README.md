@@ -43,6 +43,16 @@ cargo install cargo-deb
 cargo deb --install
 ```
 
+### MacOS
+
+- Install alacritty
+
+```
+brew install alacritty
+```
+
+- Clone the project, then build. Create the config dir and modify the default config file (below) to specify alacritty.
+
 ## Build
 
 ```sh
