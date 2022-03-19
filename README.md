@@ -1,6 +1,6 @@
 glrnvim
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Build Status](https://travis-ci.com/beeender/glrnvim.svg?branch=master)](https://travis-ci.com/beeender/glrnvim)
 =======
@@ -108,6 +108,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/LollipopFt"><img src="https://avatars.githubusercontent.com/u/62802897?v=4?s=100" width="100px;" alt=""/><br /><sub><b>LollipopFt</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=LollipopFt" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/robacarp"><img src="https://avatars.githubusercontent.com/u/208647?v=4?s=100" width="100px;" alt=""/><br /><sub><b>robacarp</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=robacarp" title="Documentation">📖</a></td>
   </tr>
 </table>
 
