@@ -134,7 +134,6 @@ fn show_help() {
 
     match dirs::config_dir() {
         Some(mut conf_dir) => {
-            // let mut conf_path = conf_dir.clone();
             conf_dir.push("glrnvim");
             conf_dir.push("config.yml");
             println!("\nConfig file: {}", conf_dir.display());
