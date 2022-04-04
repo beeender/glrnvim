@@ -4,10 +4,14 @@
 # Current supported terminals: alacritty, urxvt, kitty, wezterm.
 #backend: urxvt
 
-# path to backend executable file
+# Path to backend executable file
 # NOTE: requires a backend key
 # NOTE: old key exe_path is now deprecated but can still be used
 #term_exe_path: /path/to/urxvt
+
+# Configuration file for the selected terminal.
+# This option is not supported by urxvt.
+#term_config_path: /path/to/config.yaml
 
 # Specify the Neovim executable path.
 # NOTE: nvim will be used if not specified

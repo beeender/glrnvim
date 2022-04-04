@@ -16,7 +16,6 @@ pub const ALACRITTY_NAME: &str = "alacritty";
 
 struct Alacritty {
     exe_path: PathBuf,
-    cfg_file: Option<NamedTempFile>,
 }
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
@@ -24,12 +23,11 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
 
     Ok(Box::new(Alacritty {
         exe_path,
-        cfg_file: None,
     }))
 }
 
 impl Alacritty {
-    fn create_conf_file(&mut self, base_mapping: &mut serde_yaml::Mapping, config: &Config) {
+    fn create_conf_file(&mut self, base_mapping: &mut serde_yaml::Mapping, config: &Config) -> NamedTempFile{
         let key_font = serde_yaml::to_value("font").unwrap();
         if !base_mapping.contains_key(&key_font) {
             // Try to merge the terminal settings
@@ -86,7 +84,7 @@ impl Alacritty {
         let file = tempfile::NamedTempFile::new().unwrap();
         fs::write(&file, after.as_bytes()).unwrap();
 
-        self.cfg_file = Some(file);
+        file
     }
 
     // Load the default alacritty config
@@ -114,15 +112,19 @@ impl Alacritty {
 
 impl Functions for Alacritty {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
-        let mut base_conf = match config.load_term_conf {
-            true => Alacritty::load_alacritty_conf(),
-            _ => serde_yaml::Mapping::new(),
-        };
-
-        self.create_conf_file(&mut base_conf, config);
         let mut command = std::process::Command::new(&self.exe_path);
-        command.arg("--config-file");
-        command.arg(self.cfg_file.as_ref().unwrap().path());
+        if let Some(config_path) = config.term_config_path.as_ref() {
+            command.arg("--config-file");
+            command.arg(config_path);
+        } else {
+            let mut base_conf = match config.load_term_conf {
+                true => Alacritty::load_alacritty_conf(),
+                _ => serde_yaml::Mapping::new(),
+            };
+            let config_path = self.create_conf_file(&mut base_conf, config);
+            command.arg("--config-file");
+            command.arg(config_path.path());
+        }
         command.arg("--class");
         command.arg("glrnvim");
 
@@ -190,6 +192,7 @@ mod tests {
             fork: false,
             backend: Some(config::Backend::Alacritty),
             term_exe_path: None,
+            term_config_path: None,
             exe_path: None,
             nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
@@ -198,12 +201,9 @@ mod tests {
         };
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
-            cfg_file: None,
         };
-        alacritty.create_conf_file(&mut serde_yaml::Mapping::new(), &conf);
-        let tmp_conf = alacritty.cfg_file;
-        assert!(tmp_conf.is_some());
-        let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
+        let tmp_conf = alacritty.create_conf_file(&mut serde_yaml::Mapping::new(), &conf);
+        let result = fs::read_to_string(tmp_conf.path());
         assert!(result.is_ok());
         let expected = r#"---
 font:
@@ -235,6 +235,7 @@ key_bindings:
             fork: false,
             backend: Some(config::Backend::Alacritty),
             term_exe_path: None,
+            term_config_path: None,
             exe_path: None,
             nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
@@ -243,12 +244,9 @@ key_bindings:
         };
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
-            cfg_file: None,
         };
-        alacritty.create_conf_file(&mut term_conf, &conf);
-        let tmp_conf = alacritty.cfg_file;
-        assert!(tmp_conf.is_some());
-        let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
+        let tmp_conf = alacritty.create_conf_file(&mut term_conf, &conf);
+        let result = fs::read_to_string(tmp_conf.path());
         assert!(result.is_ok());
         let expected = r#"---
 font:
@@ -280,6 +278,7 @@ key_bindings:
             fork: false,
             backend: Some(config::Backend::Alacritty),
             term_exe_path: None,
+            term_config_path: None,
             exe_path: None,
             nvim_exe_path: "nvim".to_owned(),
             font_size: 0,
@@ -288,12 +287,9 @@ key_bindings:
         };
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
-            cfg_file: None,
         };
-        alacritty.create_conf_file(&mut term_conf, &conf);
-        let tmp_conf = alacritty.cfg_file;
-        assert!(tmp_conf.is_some());
-        let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
+        let tmp_conf = alacritty.create_conf_file(&mut term_conf, &conf);
+        let result = fs::read_to_string(tmp_conf.path());
         assert!(result.is_ok());
         let expected = r#"---
 font:
@@ -328,6 +324,7 @@ key_bindings:
             fork: false,
             backend: Some(config::Backend::Alacritty),
             term_exe_path: None,
+            term_config_path: None,
             exe_path: None,
             nvim_exe_path: "nvim".to_owned(),
             font_size: 0,
@@ -336,12 +333,9 @@ key_bindings:
         };
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
-            cfg_file: None,
         };
-        alacritty.create_conf_file(&mut term_conf, &conf);
-        let tmp_conf = alacritty.cfg_file;
-        assert!(tmp_conf.is_some());
-        let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
+        let tmp_conf = alacritty.create_conf_file(&mut term_conf, &conf);
+        let result = fs::read_to_string(tmp_conf.path());
         assert!(result.is_ok());
         let expected = r#"---
 colors:

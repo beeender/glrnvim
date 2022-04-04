@@ -23,6 +23,7 @@ pub struct Config {
     // TODO: this config option is deprecated, will be removed in the future
     pub exe_path: Option<String>,
     pub term_exe_path: Option<String>,
+    pub term_config_path: Option<String>,
     #[serde(default)]
     pub nvim_exe_path: String,
     #[serde(default)]
@@ -41,6 +42,7 @@ impl Default for Config {
             nvim_exe_path: NVIM_NAME.to_owned(),
             exe_path: None,
             term_exe_path: None,
+            term_config_path: None,
             fonts: Vec::new(),
             font_size: 0,
             load_term_conf: false,
