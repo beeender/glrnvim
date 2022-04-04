@@ -158,12 +158,14 @@ fonts:
     }
 
     #[test]
-    fn test_parse_backend_and_term_exe_path() {
+    fn test_parse_backend_and_term_exe_path_and_term_config_path() {
         let config =
-            parse(make_cfg_file("backend: alacritty\nterm_exe_path: /path/to/alacritty").path);
+            parse(make_cfg_file("backend: alacritty\nterm_exe_path: /path/to/alacritty\nterm_config_path: /path/to/config").path);
         assert_eq!(config.backend, Some(Backend::Alacritty));
         assert_eq!(config.term_exe_path, Some("/path/to/alacritty".to_string()));
+        assert_eq!(config.term_config_path, Some("/path/to/config".to_string()));
     }
+
 
     #[test]
     fn test_parse_backend_and_deprecated_exe_path() {
