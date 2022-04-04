@@ -55,7 +55,7 @@ impl Wezterm {
 impl Functions for Wezterm {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
         self.init_args(config);
-        let mut command = std::process::Command::new(self.exe_path.to_owned());
+        let mut command = std::process::Command::new(&self.exe_path);
         command.args(&self.args);
         if !config.load_term_conf {
             self.create_conf_file();

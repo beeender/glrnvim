@@ -133,11 +133,11 @@ fn show_help() {
     }
 
     match dirs::config_dir() {
-        Some(conf_dir) => {
-            let mut conf_path = conf_dir.clone();
-            conf_path.push("glrnvim");
-            conf_path.push("config.yml");
-            println!("\nConfig file: {}", conf_path.display().to_string());
+        Some(mut conf_dir) => {
+            // let mut conf_path = conf_dir.clone();
+            conf_dir.push("glrnvim");
+            conf_dir.push("config.yml");
+            println!("\nConfig file: {}", conf_dir.display());
             println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
         }
         None => {

@@ -69,7 +69,7 @@ impl Functions for Kitty {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
         self.create_conf_file(config);
 
-        let mut command = std::process::Command::new(self.exe_path.to_owned());
+        let mut command = std::process::Command::new(&self.exe_path);
 
         if config.load_term_conf {
             let confs = Kitty::find_default_confs();

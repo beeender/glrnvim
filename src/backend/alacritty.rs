@@ -120,7 +120,7 @@ impl Functions for Alacritty {
         };
 
         self.create_conf_file(&mut base_conf, config);
-        let mut command = std::process::Command::new(self.exe_path.to_owned());
+        let mut command = std::process::Command::new(&self.exe_path);
         command.arg("--config-file");
         command.arg(self.cfg_file.as_ref().unwrap().path());
         command.arg("--class");

@@ -108,8 +108,8 @@ mod tests {
         let dir = tempdir().unwrap();
 
         let file_path = dir.path().join("glrnvim.yaml");
-        let mut file = File::create(file_path.to_owned()).unwrap();
-        file.write(content.as_bytes()).unwrap();
+        let mut file = File::create(&file_path).unwrap();
+        file.write_all(content.as_bytes()).unwrap();
         file.flush().unwrap();
         drop(file);
         TempConfFile {
