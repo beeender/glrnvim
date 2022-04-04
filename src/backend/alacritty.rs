@@ -2,15 +2,15 @@ use super::Functions;
 use crate::config::Config;
 use crate::error::GlrnvimError;
 use regex::Regex;
-use std::fs;
 use std::ffi::OsStr;
-use std::path::PathBuf;
+use std::fs;
 use std::path::Path;
+use std::path::PathBuf;
+use std::{thread, time};
 use sysinfo::{Pid, ProcessExt, Signal, System, SystemExt};
 use tempfile::NamedTempFile;
-use std::{thread, time};
-extern crate serde_yaml;
 extern crate log;
+extern crate serde_yaml;
 
 pub const ALACRITTY_NAME: &str = "alacritty";
 
@@ -29,7 +29,23 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
 }
 
 impl Alacritty {
-    fn create_conf_file(&mut self, base_mapping: &mut serde_yaml::Mapping, config: &Config) {
+    fn create_base_conf(&mut self, config: &Config) -> serde_yaml::Mapping {
+        config.term_config_path.as_ref().map_or_else(
+            {
+                || match config.load_term_conf {
+                    true => Alacritty::load_alacritty_conf(None),
+                    _ => serde_yaml::Mapping::new(),
+                }
+            },
+            |p| Alacritty::load_alacritty_conf(Some(p.to_string())),
+        )
+    }
+
+    fn create_conf_file(
+        &mut self,
+        base_mapping: &mut serde_yaml::Mapping,
+        config: &Config,
+    ) {
         let key_font = serde_yaml::to_value("font").unwrap();
         if !base_mapping.contains_key(&key_font) {
             // Try to merge the terminal settings
@@ -90,37 +106,38 @@ impl Alacritty {
     }
 
     // Load the default alacritty config
-    fn load_alacritty_conf() -> serde_yaml::Mapping {
-        let base_confs: [String; 0] = [];
-        let pri_confs: [String; 3] = [
-            "$XDG_CONFIG_HOME/alacritty/alacritty.yml".to_string(),
-            "$HOME/.config/alacritty/alacritty.yml".to_string(),
-            "$XDG_CONFIG_DIRS/alacritty/alacritty.yml".to_string(),
-        ];
-        let confs = super::find_term_conf_files(&base_confs, &pri_confs);
-        if !confs.is_empty() {
-            let path = confs[0].to_owned();
-            let file = std::fs::File::open(path).unwrap();
-            let reader = std::io::BufReader::new(file);
-            match serde_yaml::from_reader(reader) {
-                Ok(mapping) => mapping,
-                Err(_) => serde_yaml::Mapping::new(),
+    fn load_alacritty_conf(path: Option<String>) -> serde_yaml::Mapping {
+        let conf_path = path.or({
+            let base_confs: [String; 0] = [];
+            let pri_confs: [String; 3] = [
+                "$XDG_CONFIG_HOME/alacritty/alacritty.yml".to_string(),
+                "$HOME/.config/alacritty/alacritty.yml".to_string(),
+                "$XDG_CONFIG_DIRS/alacritty/alacritty.yml".to_string(),
+            ];
+            let confs = super::find_term_conf_files(&base_confs, &pri_confs);
+            Some(confs[0].to_string())
+        });
+        match conf_path {
+            Some(p) => {
+                let file = std::fs::File::open(p).unwrap();
+                let reader = std::io::BufReader::new(file);
+                match serde_yaml::from_reader(reader) {
+                    Ok(mapping) => mapping,
+                    Err(_) => serde_yaml::Mapping::new(),
+                }
             }
-        } else {
-            serde_yaml::Mapping::new()
+            _ => serde_yaml::Mapping::new(),
         }
     }
 }
 
 impl Functions for Alacritty {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
-        let mut base_conf = match config.load_term_conf {
-            true => Alacritty::load_alacritty_conf(),
-            _ => serde_yaml::Mapping::new(),
-        };
+
+        let mut base_conf = self.create_base_conf(config);
 
         self.create_conf_file(&mut base_conf, config);
-        let mut command = std::process::Command::new(self.exe_path.to_owned());
+        let mut command = std::process::Command::new(&self.exe_path);
         command.arg("--config-file");
         command.arg(self.cfg_file.as_ref().unwrap().path());
         command.arg("--class");
@@ -142,14 +159,18 @@ impl Functions for Alacritty {
     // See https://github.com/neovim/neovim/issues/11330
     #[cfg(target_os = "linux")]
     fn post_start(&mut self, config: &Config, term_pid: Pid) {
-        let proc_name = match Path::new(&config.nvim_exe_path).file_name().and_then(OsStr::to_str) {
+        let proc_name = match Path::new(&config.nvim_exe_path)
+            .file_name()
+            .and_then(OsStr::to_str)
+        {
             None => {
-                log::warn!("Cannot identify executable name from '{}'", config.nvim_exe_path);
+                log::warn!(
+                    "Cannot identify executable name from '{}'",
+                    config.nvim_exe_path
+                );
                 return;
             }
-            Some (name) => {
-                name
-            }
+            Some(name) => name,
         };
 
         let mut count = 0u32;
@@ -163,14 +184,14 @@ impl Functions for Alacritty {
                     Some(ppid) => {
                         if ppid == term_pid {
                             process.kill_with(Signal::Winch);
-                            return
+                            return;
                         }
                     }
                 }
             }
             if count == 10 {
                 log::warn!("Failed to try resizing the neovim window");
-                break
+                break;
             }
             thread::sleep(ten_millis);
         }
@@ -182,6 +203,7 @@ mod tests {
     use super::*;
     use crate::config;
     use std::fs;
+    use std::io::{BufWriter, Write};
     use std::path::PathBuf;
 
     #[test]
@@ -190,6 +212,7 @@ mod tests {
             fork: false,
             backend: Some(config::Backend::Alacritty),
             term_exe_path: None,
+            term_config_path: None,
             exe_path: None,
             nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
@@ -235,6 +258,7 @@ key_bindings:
             fork: false,
             backend: Some(config::Backend::Alacritty),
             term_exe_path: None,
+            term_config_path: None,
             exe_path: None,
             nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
@@ -280,6 +304,7 @@ key_bindings:
             fork: false,
             backend: Some(config::Backend::Alacritty),
             term_exe_path: None,
+            term_config_path: None,
             exe_path: None,
             nvim_exe_path: "nvim".to_owned(),
             font_size: 0,
@@ -328,6 +353,7 @@ key_bindings:
             fork: false,
             backend: Some(config::Backend::Alacritty),
             term_exe_path: None,
+            term_config_path: None,
             exe_path: None,
             nvim_exe_path: "nvim".to_owned(),
             font_size: 0,
@@ -347,6 +373,54 @@ key_bindings:
 colors:
   primary:
     background: "0x424242"
+key_bindings:
+  - key: Z
+    mods: Control
+    action: None
+"#;
+        assert_eq!(result.unwrap_or_default(), expected)
+    }
+
+    #[test]
+    fn test_term_config_path() {
+        let term_conf = r#"
+env:
+  TERM: some
+font:
+  size: 16
+"#;
+        let term_conf_file = tempfile::NamedTempFile::new().unwrap();
+        let mut w = BufWriter::new(&term_conf_file);
+        w.write_all(term_conf.as_bytes()).ok();
+        w.flush().expect("");
+        let conf = config::Config {
+            fork: false,
+            backend: Some(config::Backend::Alacritty),
+            term_exe_path: None,
+            term_config_path: Some(term_conf_file.path().to_str().unwrap().to_string()),
+            exe_path: None,
+            nvim_exe_path: "nvim".to_owned(),
+            font_size: 14,
+            fonts: vec!["test_font".to_string()],
+            load_term_conf: false,
+        };
+        let mut alacritty = Alacritty {
+            exe_path: PathBuf::new(),
+            cfg_file: None,
+        };
+        let mut base_conf = alacritty.create_base_conf(&conf);
+        alacritty.create_conf_file(&mut base_conf, &conf);
+        let tmp_conf = alacritty.cfg_file;
+        assert!(tmp_conf.is_some());
+        let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
+        assert!(result.is_ok());
+        let expected = r#"---
+env:
+  TERM: some
+font:
+  size: 14
+  normal:
+    family: test_font
 key_bindings:
   - key: Z
     mods: Control

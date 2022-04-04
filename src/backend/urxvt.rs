@@ -41,7 +41,7 @@ impl Urxvt {
 impl Functions for Urxvt {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
         self.init_args(config);
-        let mut command = std::process::Command::new(self.exe_path.to_owned());
+        let mut command = std::process::Command::new(&self.exe_path);
 
         command.arg("-name");
         command.arg("glrnvim");

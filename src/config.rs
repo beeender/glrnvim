@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 const NVIM_NAME: &str = "nvim";
 
-#[derive(Debug, PartialEq, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Backend {
     Alacritty,
@@ -15,7 +15,7 @@ pub enum Backend {
     Wezterm,
 }
 
-#[derive(Debug, PartialEq, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Deserialize)]
 pub struct Config {
     #[serde(skip)]
     pub fork: bool,
@@ -23,6 +23,7 @@ pub struct Config {
     // TODO: this config option is deprecated, will be removed in the future
     pub exe_path: Option<String>,
     pub term_exe_path: Option<String>,
+    pub term_config_path: Option<String>,
     #[serde(default)]
     pub nvim_exe_path: String,
     #[serde(default)]
@@ -41,6 +42,7 @@ impl Default for Config {
             nvim_exe_path: NVIM_NAME.to_owned(),
             exe_path: None,
             term_exe_path: None,
+            term_config_path: None,
             fonts: Vec::new(),
             font_size: 0,
             load_term_conf: false,
@@ -108,8 +110,8 @@ mod tests {
         let dir = tempdir().unwrap();
 
         let file_path = dir.path().join("glrnvim.yaml");
-        let mut file = File::create(file_path.to_owned()).unwrap();
-        file.write(content.as_bytes()).unwrap();
+        let mut file = File::create(&file_path).unwrap();
+        file.write_all(content.as_bytes()).unwrap();
         file.flush().unwrap();
         drop(file);
         TempConfFile {
@@ -156,12 +158,14 @@ fonts:
     }
 
     #[test]
-    fn test_parse_backend_and_term_exe_path() {
+    fn test_parse_backend_and_term_exe_path_and_term_config_path() {
         let config =
-            parse(make_cfg_file("backend: alacritty\nterm_exe_path: /path/to/alacritty").path);
+            parse(make_cfg_file("backend: alacritty\nterm_exe_path: /path/to/alacritty\nterm_config_path: /path/to/config").path);
         assert_eq!(config.backend, Some(Backend::Alacritty));
         assert_eq!(config.term_exe_path, Some("/path/to/alacritty".to_string()));
+        assert_eq!(config.term_config_path, Some("/path/to/config".to_string()));
     }
+
 
     #[test]
     fn test_parse_backend_and_deprecated_exe_path() {

@@ -69,9 +69,12 @@ impl Functions for Kitty {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
         self.create_conf_file(config);
 
-        let mut command = std::process::Command::new(self.exe_path.to_owned());
+        let mut command = std::process::Command::new(&self.exe_path);
 
-        if config.load_term_conf {
+        if let Some(config_path) = config.term_config_path.as_ref() {
+            command.arg("--config");
+            command.arg(config_path.as_str());
+        } else if config.load_term_conf {
             let confs = Kitty::find_default_confs();
             for conf in confs {
                 command.arg("--config");
@@ -79,6 +82,7 @@ impl Functions for Kitty {
             }
         }
 
+        // Overwrite the config with the generated settings from glrnvim.yml
         command.arg("--config");
         command.arg(self.temp_file.as_ref().unwrap().path());
 
