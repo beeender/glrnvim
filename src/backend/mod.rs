@@ -18,15 +18,19 @@ pub trait Functions {
 
 #[cfg(not(target_os = "windows"))]
 const COMMON_ARGS: &[&str] = &[
-    "+set termguicolors", // Enable 24-bits colors
-    "+set title",         // Set title string
+    "--cmd",
+    "set termguicolors", // Enable 24-bits colors
+    "--cmd",
+    "set title",         // Set title string
     "--cmd",
     "let g:glrnvim_gui=1",
 ];
 #[cfg(target_os = "windows")]
 const COMMON_ARGS: &[&str] = &[
-    "\"+set termguicolors\"", // Enable 24-bits colors
-    "\"+set title\"",         // Set title string
+    "\"--cmd\"",
+    "\"set termguicolors\"", // Enable 24-bits colors
+    "\"--cmd\"",
+    "\"set title\"",         // Set title string
     "\"--cmd\"",
     "\"let g:glrnvim_gui=1\"",
 ];
