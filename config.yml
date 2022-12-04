@@ -4,7 +4,7 @@
 # Current supported terminals: alacritty, urxvt, kitty, wezterm.
 #backend: urxvt
 
-# path to backend executable file
+# Path to backend executable file
 # NOTE: requires a backend key
 # NOTE: old key exe_path is now deprecated but can still be used
 #term_exe_path: /path/to/urxvt
@@ -32,3 +32,10 @@
 # urxvt is not impacted by this setting. It always load resources according
 # to the defined orders.
 #load_term_conf: false
+
+# Configuration file for the selected terminal.
+# NOTE:This option is not supported by urxvt.
+# If this option is specified, the terminal's default config won't be loaded
+# when 'load_term_conf' is true.
+#term_config_path: /path/to/config.yaml
+

@@ -10,7 +10,6 @@ pub const WEZTERM_NAME: &str = "wezterm";
 struct Wezterm {
     exe_path: PathBuf,
     pub args: Vec<String>,
-    temp_file: Option<NamedTempFile>,
 }
 
 pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
@@ -19,7 +18,6 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
     Ok(Box::new(Wezterm {
         exe_path,
         args: vec![],
-        temp_file: None,
     }))
 }
 
@@ -44,24 +42,28 @@ impl Wezterm {
         self.args.push("--config".to_string());
         self.args.push("enable_tab_bar = false".to_string());
     }
-    fn create_conf_file(&mut self) {
+
+    fn create_conf_file(&mut self) -> NamedTempFile {
         let mut file = tempfile::NamedTempFile::new().unwrap();
         writeln!(file, "return {{}}").unwrap();
         file.flush().unwrap();
-        self.temp_file = Some(file);
+        file
     }
 }
 
 impl Functions for Wezterm {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
         self.init_args(config);
-        let mut command = std::process::Command::new(self.exe_path.to_owned());
-        command.args(&self.args);
-        if !config.load_term_conf {
-            self.create_conf_file();
+        let mut command = std::process::Command::new(&self.exe_path);
+        if let Some(config_path) = config.term_config_path.as_ref() {
             command.arg("--config-file");
-            command.arg(self.temp_file.as_ref().unwrap().path());
+            command.arg(config_path);
+        } else if !config.load_term_conf {
+            let temp_file = self.create_conf_file();
+            command.arg("--config-file");
+            command.arg(temp_file.path());
         }
+        command.args(&self.args);
         command.arg("start");
         command.arg("--class");
         command.arg("glrnvim");
