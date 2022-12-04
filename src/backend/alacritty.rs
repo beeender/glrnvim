@@ -112,9 +112,9 @@ impl Alacritty {
             ];
             let confs = super::find_term_conf_files(&base_confs, &pri_confs);
             if confs.is_empty() {
-                Some(confs[0].to_string())
-            } else {
                 None
+            } else {
+                Some(confs[0].to_string())
             }
         });
         match conf_path {
