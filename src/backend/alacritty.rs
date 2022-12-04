@@ -41,11 +41,7 @@ impl Alacritty {
         )
     }
 
-    fn create_conf_file(
-        &mut self,
-        base_mapping: &mut serde_yaml::Mapping,
-        config: &Config,
-    ) {
+    fn create_conf_file(&mut self, base_mapping: &mut serde_yaml::Mapping, config: &Config) {
         let key_font = serde_yaml::to_value("font").unwrap();
         if !base_mapping.contains_key(&key_font) {
             // Try to merge the terminal settings
@@ -115,7 +111,11 @@ impl Alacritty {
                 "$XDG_CONFIG_DIRS/alacritty/alacritty.yml".to_string(),
             ];
             let confs = super::find_term_conf_files(&base_confs, &pri_confs);
-            Some(confs[0].to_string())
+            if confs.is_empty() {
+                Some(confs[0].to_string())
+            } else {
+                None
+            }
         });
         match conf_path {
             Some(p) => {
@@ -133,7 +133,6 @@ impl Alacritty {
 
 impl Functions for Alacritty {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
-
         let mut base_conf = self.create_base_conf(config);
 
         self.create_conf_file(&mut base_conf, config);
