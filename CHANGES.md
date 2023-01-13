@@ -3,10 +3,10 @@ CHANGES
 
 Next Release
 
-* Allow to specify a configuration file path for Kitty, Wezterm and Alacritty inside
-  config.yml
+1.3.2
 
--
+- Allow to specify a configuration file path for Kitty, Wezterm and Alacritty inside
+  config.yml
 
 1.3.1
 
