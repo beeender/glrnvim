@@ -3,6 +3,11 @@ CHANGES
 
 Next Release
 
+1.4.0
+
+- Fix issues with alacritty `0.13.0` by using toml config file. `alacritty < 0.13.0` won't be supported anymore.
+
+
 1.3.2
 
 - Allow to specify a configuration file path for Kitty, Wezterm and Alacritty inside
