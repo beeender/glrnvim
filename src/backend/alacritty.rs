@@ -1,7 +1,6 @@
 use super::Functions;
 use crate::config::Config;
 use crate::error::GlrnvimError;
-use regex::Regex;
 use std::ffi::OsStr;
 use std::fs;
 use std::path::Path;
@@ -10,7 +9,7 @@ use std::{thread, time};
 use sysinfo::{Pid, ProcessExt, Signal, System, SystemExt};
 use tempfile::NamedTempFile;
 extern crate log;
-extern crate serde_yaml;
+use toml_edit::{value, Document, Item, Table, Value};
 
 pub const ALACRITTY_NAME: &str = "alacritty";
 
@@ -29,86 +28,73 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
 }
 
 impl Alacritty {
-    fn create_base_conf(&mut self, config: &Config) -> serde_yaml::Mapping {
+    fn create_base_conf(&mut self, config: &Config) -> Document {
         config.term_config_path.as_ref().map_or_else(
             {
                 || match config.load_term_conf {
                     true => Alacritty::load_alacritty_conf(None),
-                    _ => serde_yaml::Mapping::new(),
+                    _ => Document::new(),
                 }
             },
             |p| Alacritty::load_alacritty_conf(Some(p.to_string())),
         )
     }
 
-    fn create_conf_file(&mut self, base_mapping: &mut serde_yaml::Mapping, config: &Config) {
-        let key_font = serde_yaml::to_value("font").unwrap();
-        if !base_mapping.contains_key(&key_font) {
+    fn create_conf_file(&mut self, base_mapping: &mut Document, config: &Config) {
+        let key_font = "font";
+        if !base_mapping.contains_key(key_font) {
             // Try to merge the terminal settings
-            let v = serde_yaml::to_value(serde_yaml::Mapping::new()).unwrap();
-            base_mapping.insert(key_font.clone(), v);
+            let v = Table::new();
+            base_mapping[key_font] = Item::Table(v);
         }
         // Set the font size
         let font_mapping = base_mapping
-            .get_mut(&key_font)
+            .get_mut(key_font)
             .unwrap()
-            .as_mapping_mut()
+            .as_table_mut()
             .unwrap();
         if config.font_size > 0 {
-            font_mapping.insert(
-                serde_yaml::to_value("size").unwrap(),
-                serde_yaml::to_value(config.font_size).unwrap(),
-            );
+            font_mapping.insert("size", value(Into::<i64>::into(config.font_size)));
         }
         // Set the font
         if !config.fonts.is_empty() {
-            let mut normal_mapping = serde_yaml::Mapping::new();
-            normal_mapping.insert(
-                serde_yaml::to_value("family").unwrap(),
-                serde_yaml::to_value(&config.fonts.first()).unwrap(),
-            );
-            font_mapping.insert(
-                serde_yaml::to_value("normal").unwrap(),
-                serde_yaml::to_value(normal_mapping).unwrap(),
-            );
+            let mut normal_mapping = Table::new();
+            normal_mapping.insert("family", value(config.fonts.first().unwrap().to_string()));
+            font_mapping.insert("normal", Item::Table(normal_mapping));
         }
         // Only overwrite the font setting if it has been set in the glrnvim config
         if font_mapping.is_empty() {
-            base_mapping.remove(&key_font);
+            base_mapping.remove(key_font);
         }
 
         // Disable some improper key bindings for nvim
-        let binding: serde_yaml::Value =
-            serde_yaml::from_str(r#"{key: Z, mods: Control, action: None}"#).unwrap();
-        let key_bindings = vec![binding];
-        base_mapping.insert(
-            serde_yaml::to_value("key_bindings").unwrap(),
-            serde_yaml::to_value(key_bindings).unwrap(),
-        );
+        let mut binding_z = toml_edit::InlineTable::new();
+        binding_z.insert("key", Value::from("Z"));
+        binding_z.insert("mods", Value::from("Control"));
+        binding_z.insert("action", Value::from("None"));
+        let mut bindings = toml_edit::Array::new();
+        bindings.push(binding_z);
+        let mut keyboard = Table::new();
+        keyboard["bindings"] = toml_edit::Item::Value(Value::Array(bindings));
+        base_mapping["keyboard"] = Item::Table(keyboard);
 
-        let yml_str = serde_yaml::to_string(&base_mapping).unwrap();
-        // Add single quote to hex color values like:
-        // background: 0xf1f1f1 -> background: '0xf1f1f1'
-        // Otherwise Alacritty will fail to parse the config since the
-        // hex value will be treated as numbers.
-        let re = Regex::new(r"(?P<h>.*: *)(?P<x>0x.*)").unwrap();
-        let after = re.replace_all(yml_str.as_str(), "$h'$x'");
+        let toml_str = base_mapping.to_string();
 
         // Write to a temp file to be loaded by alacritty
         let file = tempfile::NamedTempFile::new().unwrap();
-        fs::write(&file, after.as_bytes()).unwrap();
+        fs::write(&file, toml_str.as_bytes()).unwrap();
 
         self.cfg_file = Some(file);
     }
 
     // Load the default alacritty config
-    fn load_alacritty_conf(path: Option<String>) -> serde_yaml::Mapping {
+    fn load_alacritty_conf(path: Option<String>) -> Document {
         let conf_path = path.or({
             let base_confs: [String; 0] = [];
             let pri_confs: [String; 3] = [
-                "$XDG_CONFIG_HOME/alacritty/alacritty.yml".to_string(),
-                "$HOME/.config/alacritty/alacritty.yml".to_string(),
-                "$XDG_CONFIG_DIRS/alacritty/alacritty.yml".to_string(),
+                "$XDG_CONFIG_HOME/alacritty/alacritty.toml".to_string(),
+                "$HOME/.config/alacritty/alacritty.tolm".to_string(),
+                "$XDG_CONFIG_DIRS/alacritty/alacritty.toml".to_string(),
             ];
             let confs = super::find_term_conf_files(&base_confs, &pri_confs);
             if confs.is_empty() {
@@ -119,23 +105,26 @@ impl Alacritty {
         });
         match conf_path {
             Some(p) => {
-                let file = std::fs::File::open(p).unwrap();
-                let reader = std::io::BufReader::new(file);
-                match serde_yaml::from_reader(reader) {
+                let content = std::fs::read_to_string(p.clone())
+                    .expect(format!("Cannot load term config file: '{}'", p).as_ref());
+                match content.parse::<Document>() {
                     Ok(mapping) => mapping,
-                    Err(_) => serde_yaml::Mapping::new(),
+                    Err(msg) => {
+                        log::warn!("Cannot identify executable name from '{}'", msg);
+                        Document::new()
+                    }
                 }
             }
-            _ => serde_yaml::Mapping::new(),
+            _ => Document::new(),
         }
     }
 }
 
 impl Functions for Alacritty {
     fn create_command(&mut self, config: &Config) -> std::process::Command {
-        let mut base_conf = self.create_base_conf(config);
+        let mut doc = self.create_base_conf(config);
 
-        self.create_conf_file(&mut base_conf, config);
+        self.create_conf_file(&mut doc, config);
         let mut command = std::process::Command::new(&self.exe_path);
         command.arg("--config-file");
         command.arg(self.cfg_file.as_ref().unwrap().path());
@@ -222,36 +211,29 @@ mod tests {
             exe_path: PathBuf::new(),
             cfg_file: None,
         };
-        alacritty.create_conf_file(&mut serde_yaml::Mapping::new(), &conf);
+        alacritty.create_conf_file(&mut Document::new(), &conf);
         let tmp_conf = alacritty.cfg_file;
         assert!(tmp_conf.is_some());
         let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
         assert!(result.is_ok());
-        let expected = r#"---
-font:
-  size: 14
-  normal:
-    family: test_font
-key_bindings:
-  - key: Z
-    mods: Control
-    action: None
+        let expected = r#"[font]
+size = 14
+
+[font.normal]
+family = "test_font"
+
+[keyboard]
+bindings = [{ key = "Z", mods = "Control", action = "None" }]
 "#;
         assert_eq!(result.unwrap_or_default(), expected)
     }
 
     #[test]
     fn test_overwrite_alacritty_conf() {
-        let mut term_conf = serde_yaml::Mapping::new();
-        let mut font_mapping = serde_yaml::Mapping::new();
-        font_mapping.insert(
-            serde_yaml::to_value("size").unwrap(),
-            serde_yaml::to_value(42).unwrap(),
-        );
-        term_conf.insert(
-            serde_yaml::to_value("font").unwrap(),
-            serde_yaml::to_value(font_mapping).unwrap(),
-        );
+        let mut term_conf = Document::new();
+        let mut font_mapping = Table::new();
+        font_mapping.insert("size", value(42));
+        term_conf.insert("font", Item::Table(font_mapping));
 
         let conf = config::Config {
             fork: false,
@@ -273,31 +255,24 @@ key_bindings:
         assert!(tmp_conf.is_some());
         let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
         assert!(result.is_ok());
-        let expected = r#"---
-font:
-  size: 14
-  normal:
-    family: test_font
-key_bindings:
-  - key: Z
-    mods: Control
-    action: None
+        let expected = r#"[font]
+size = 14
+
+[font.normal]
+family = "test_font"
+
+[keyboard]
+bindings = [{ key = "Z", mods = "Control", action = "None" }]
 "#;
         assert_eq!(result.unwrap_or_default(), expected)
     }
 
     #[test]
     fn test_not_overwrite_alacritty_conf() {
-        let mut term_conf = serde_yaml::Mapping::new();
-        let mut font_mapping = serde_yaml::Mapping::new();
-        font_mapping.insert(
-            serde_yaml::to_value("size").unwrap(),
-            serde_yaml::to_value(42).unwrap(),
-        );
-        term_conf.insert(
-            serde_yaml::to_value("font").unwrap(),
-            serde_yaml::to_value(font_mapping).unwrap(),
-        );
+        let mut term_conf = Document::new();
+        let mut font_mapping = Table::new();
+        font_mapping.insert("size", value(42));
+        term_conf.insert("font", Item::Table(font_mapping));
 
         let conf = config::Config {
             fork: false,
@@ -319,34 +294,23 @@ key_bindings:
         assert!(tmp_conf.is_some());
         let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
         assert!(result.is_ok());
-        let expected = r#"---
-font:
-  size: 42
-key_bindings:
-  - key: Z
-    mods: Control
-    action: None
+        let expected = r#"[font]
+size = 42
+
+[keyboard]
+bindings = [{ key = "Z", mods = "Control", action = "None" }]
 "#;
         assert_eq!(result.unwrap_or_default(), expected)
     }
 
     #[test]
     fn test_hex_value_serialize() {
-        let mut term_conf = serde_yaml::Mapping::new();
-        let mut primary = serde_yaml::Mapping::new();
-        let mut colors = serde_yaml::Mapping::new();
-        primary.insert(
-            serde_yaml::to_value("background").unwrap(),
-            serde_yaml::to_value("0x424242").unwrap(),
-        );
-        colors.insert(
-            serde_yaml::to_value("primary").unwrap(),
-            serde_yaml::to_value(primary).unwrap(),
-        );
-        term_conf.insert(
-            serde_yaml::to_value("colors").unwrap(),
-            serde_yaml::to_value(colors).unwrap(),
-        );
+        let mut term_conf = Document::new();
+        let mut primary = Table::new();
+        let mut colors = Table::new();
+        primary.insert("background", value("0x424242".to_string()));
+        colors.insert("primary", Item::Table(primary));
+        term_conf.insert("colors", Item::Table(colors));
 
         let conf = config::Config {
             fork: false,
@@ -368,25 +332,24 @@ key_bindings:
         assert!(tmp_conf.is_some());
         let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
         assert!(result.is_ok());
-        let expected = r#"---
-colors:
-  primary:
-    background: "0x424242"
-key_bindings:
-  - key: Z
-    mods: Control
-    action: None
+        let expected = r#"[colors]
+
+[colors.primary]
+background = "0x424242"
+
+[keyboard]
+bindings = [{ key = "Z", mods = "Control", action = "None" }]
 "#;
         assert_eq!(result.unwrap_or_default(), expected)
     }
 
     #[test]
     fn test_term_config_path() {
-        let term_conf = r#"
-env:
-  TERM: some
-font:
-  size: 16
+        let term_conf = r#"[env]
+TERM = "some"
+
+[font]
+size = 16
 "#;
         let term_conf_file = tempfile::NamedTempFile::new().unwrap();
         let mut w = BufWriter::new(&term_conf_file);
@@ -413,17 +376,17 @@ font:
         assert!(tmp_conf.is_some());
         let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
         assert!(result.is_ok());
-        let expected = r#"---
-env:
-  TERM: some
-font:
-  size: 14
-  normal:
-    family: test_font
-key_bindings:
-  - key: Z
-    mods: Control
-    action: None
+        let expected = r#"[env]
+TERM = "some"
+
+[font]
+size = 14
+
+[font.normal]
+family = "test_font"
+
+[keyboard]
+bindings = [{ key = "Z", mods = "Control", action = "None" }]
 "#;
         assert_eq!(result.unwrap_or_default(), expected)
     }

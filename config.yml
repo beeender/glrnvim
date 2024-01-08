@@ -37,5 +37,5 @@
 # NOTE:This option is not supported by urxvt.
 # If this option is specified, the terminal's default config won't be loaded
 # when 'load_term_conf' is true.
-#term_config_path: /path/to/config.yaml
+#term_config_path: /path/to/config.toml
 

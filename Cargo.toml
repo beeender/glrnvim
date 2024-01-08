@@ -8,13 +8,13 @@ readme = "README.md"
 license = "GPL-3.0"
 
 [dependencies]
-regex = "1.5.*"
 which = "4.2.*"
 dirs = "4.0.*"
 tempfile = "3.8.*"
 # 1.0.98 doesn't compile under Mac
 serde = { version = "1.0.*", features = ["derive"] }
 serde_yaml = "0.8.*"
+toml_edit = "0.21.*"
 shellexpand = "2.1.*"
 log = "0.4.*"
 env_logger = "0.10.*"
