@@ -53,15 +53,10 @@ impl Default for Config {
 pub fn parse(path: PathBuf) -> Config {
     let file = std::fs::File::open(path).unwrap();
     let reader = std::io::BufReader::new(file);
-    let mut config = match serde_yaml::from_reader(reader) {
+    let mut config: Config = match serde_yaml::from_reader(reader) {
         Ok(c) => c,
         Err(e) => {
-            // Work around the empty yaml file issue.
-            // See https://github.com/dtolnay/serde-yaml/issues/86
-            if e.to_string() != "EOF while parsing a value" {
-                panic!("{}", e.to_string())
-            }
-            Config::default()
+            panic!("{}", e.to_string())
         }
     };
 
@@ -165,7 +160,6 @@ fonts:
         assert_eq!(config.term_exe_path, Some("/path/to/alacritty".to_string()));
         assert_eq!(config.term_config_path, Some("/path/to/config".to_string()));
     }
-
 
     #[test]
     fn test_parse_backend_and_deprecated_exe_path() {
