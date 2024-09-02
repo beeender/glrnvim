@@ -1,6 +1,6 @@
 glrnvim
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Build Status](https://travis-ci.com/beeender/glrnvim.svg?branch=master)](https://travis-ci.com/beeender/glrnvim)
 =======
@@ -97,19 +97,22 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://github.com/Stanislav-Lapata"><img src="https://avatars1.githubusercontent.com/u/12072329?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stanislav Lapata</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=Stanislav-Lapata" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/yeyan"><img src="https://avatars1.githubusercontent.com/u/5893217?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ye Yan</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=yeyan" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/LasseWolter"><img src="https://avatars1.githubusercontent.com/u/29123172?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lasse Wolter</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=LasseWolter" title="Documentation">📖</a></td>
-    <td align="center"><a href="http://twitter.com/#!/ddrcode"><img src="https://avatars1.githubusercontent.com/u/700125?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David de Rosier</b></sub></a><br /><a href="#platform-ddrcode" title="Packaging/porting to new platform">📦</a></td>
-    <td align="center"><a href="http://jandamm.de"><img src="https://avatars.githubusercontent.com/u/5963139?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jan Damm</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=jandamm" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/p00f"><img src="https://avatars.githubusercontent.com/u/36493671?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chinmay Dalal</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=p00f" title="Code">💻</a></td>
-    <td align="center"><a href="https://crisidev.org/"><img src="https://avatars.githubusercontent.com/u/1781140?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matteo Bigoi</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=crisidev" title="Code">💻</a></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/LollipopFt"><img src="https://avatars.githubusercontent.com/u/62802897?v=4?s=100" width="100px;" alt=""/><br /><sub><b>LollipopFt</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=LollipopFt" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/robacarp"><img src="https://avatars.githubusercontent.com/u/208647?v=4?s=100" width="100px;" alt=""/><br /><sub><b>robacarp</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=robacarp" title="Documentation">📖</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Stanislav-Lapata"><img src="https://avatars1.githubusercontent.com/u/12072329?v=4?s=100" width="100px;" alt="Stanislav Lapata"/><br /><sub><b>Stanislav Lapata</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=Stanislav-Lapata" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yeyan"><img src="https://avatars1.githubusercontent.com/u/5893217?v=4?s=100" width="100px;" alt="Ye Yan"/><br /><sub><b>Ye Yan</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=yeyan" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LasseWolter"><img src="https://avatars1.githubusercontent.com/u/29123172?v=4?s=100" width="100px;" alt="Lasse Wolter"/><br /><sub><b>Lasse Wolter</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=LasseWolter" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://twitter.com/#!/ddrcode"><img src="https://avatars1.githubusercontent.com/u/700125?v=4?s=100" width="100px;" alt="David de Rosier"/><br /><sub><b>David de Rosier</b></sub></a><br /><a href="#platform-ddrcode" title="Packaging/porting to new platform">📦</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://jandamm.de"><img src="https://avatars.githubusercontent.com/u/5963139?v=4?s=100" width="100px;" alt="Jan Damm"/><br /><sub><b>Jan Damm</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=jandamm" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/p00f"><img src="https://avatars.githubusercontent.com/u/36493671?v=4?s=100" width="100px;" alt="Chinmay Dalal"/><br /><sub><b>Chinmay Dalal</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=p00f" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://crisidev.org/"><img src="https://avatars.githubusercontent.com/u/1781140?v=4?s=100" width="100px;" alt="Matteo Bigoi"/><br /><sub><b>Matteo Bigoi</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=crisidev" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LollipopFt"><img src="https://avatars.githubusercontent.com/u/62802897?v=4?s=100" width="100px;" alt="LollipopFt"/><br /><sub><b>LollipopFt</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=LollipopFt" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/robacarp"><img src="https://avatars.githubusercontent.com/u/208647?v=4?s=100" width="100px;" alt="robacarp"/><br /><sub><b>robacarp</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=robacarp" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://higuoxing.com"><img src="https://avatars.githubusercontent.com/u/21099318?v=4?s=100" width="100px;" alt="Xing Guo"/><br /><sub><b>Xing Guo</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=higuoxing" title="Code">💻</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->

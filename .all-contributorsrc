@@ -85,6 +85,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "higuoxing",
+      "name": "Xing Guo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21099318?v=4",
+      "profile": "https://higuoxing.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -92,5 +101,7 @@
   "projectOwner": "beeender",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitType": "docs",
+  "commitConvention": "angular"
 }
