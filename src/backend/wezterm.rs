@@ -67,6 +67,8 @@ impl Functions for Wezterm {
         command.arg("start");
         command.arg("--class");
         command.arg("glrnvim");
+        command.arg("--cwd");
+        command.arg(".");
         command.arg("--");
         command.arg(&config.nvim_exe_path);
         command.args(super::COMMON_ARGS);
