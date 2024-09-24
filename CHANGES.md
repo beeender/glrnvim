@@ -3,6 +3,8 @@ CHANGES
 
 Next Release
 
+- Fix a CWD issue with wezterm backend.
+
 1.4.0
 
 - Fix issues with alacritty `0.13.0` by using toml config file. `alacritty < 0.13.0` won't be supported anymore.
