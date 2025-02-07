@@ -160,7 +160,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     log::debug!("Start command: {:?}", command);
     let mut child = command.spawn()?;
 
-    backend_functions.post_start(&config, child.id() as Pid);
+    backend_functions.post_start(&config, Pid::from_u32(child.id()));
 
     if config.fork {
         std::process::exit(0);
