@@ -92,7 +92,7 @@ impl Alacritty {
             let base_confs: [String; 0] = [];
             let pri_confs: [String; 3] = [
                 "$XDG_CONFIG_HOME/alacritty/alacritty.toml".to_string(),
-                "$HOME/.config/alacritty/alacritty.tolm".to_string(),
+                "$HOME/.config/alacritty/alacritty.toml".to_string(),
                 "$XDG_CONFIG_DIRS/alacritty/alacritty.toml".to_string(),
             ];
             let confs = super::find_term_conf_files(&base_confs, &pri_confs);
