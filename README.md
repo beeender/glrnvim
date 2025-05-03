@@ -20,7 +20,7 @@ glrnvim wraps nvim with your favourite terminal into a standalone, non-fancy but
 
 ## Requisites
 
-* [alacritty](https://github.com/jwilm/alacritty)/[kitty](https://github.com/kovidgoyal/kitty)/[rxvt-unicode](http://software.schmorp.de/pkg/rxvt-unicode.html)/[wezterm](https://wezfurlong.org/wezterm/)
+* [alacritty](https://github.com/jwilm/alacritty)/[kitty](https://github.com/kovidgoyal/kitty)/[rxvt-unicode](http://software.schmorp.de/pkg/rxvt-unicode.html)/[wezterm](https://wezfurlong.org/wezterm/)/[foot](https://codeberg.org/dnkl/foot)
 * [neovim](https://neovim.io)
 
 ## Installation
