@@ -19,6 +19,7 @@ shellexpand = "2.1.*"
 log = "0.4.*"
 env_logger = "0.10.*"
 sysinfo = "0.22.*"
+rust-ini = "0.21"
 
 [package.metadata.deb]
 maintainer = "beeender <chenmulong@gmail.com>"
