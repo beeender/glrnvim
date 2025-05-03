@@ -2,6 +2,7 @@ mod alacritty;
 mod kitty;
 mod urxvt;
 mod wezterm;
+mod foot;
 use super::config::Config;
 use crate::config::Backend;
 use crate::error::GlrnvimError;
@@ -42,6 +43,7 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
             Backend::Urxvt => urxvt::init(config),
             Backend::Kitty => kitty::init(config),
             Backend::Wezterm => wezterm::init(config),
+            Backend::Foot => foot::init(config),
         },
         None => {
             for init_func in &[alacritty::init, urxvt::init, kitty::init, wezterm::init] {
