@@ -8,17 +8,17 @@ readme = "README.md"
 license = "GPL-3.0"
 
 [dependencies]
-which = "4.2.*"
-dirs = "4.0.*"
-tempfile = "3.8.*"
+which = "7.0.*"
+dirs = "6.0.*"
+tempfile = "3.19.*"
 # 1.0.98 doesn't compile under Mac
 serde = { version = "1.0.*", features = ["derive"] }
 serde_yaml = "0.9.34"
-toml_edit = "0.21.*"
-shellexpand = "2.1.*"
+toml_edit = "0.22.*"
+shellexpand = "3.1.*"
 log = "0.4.*"
-env_logger = "0.10.*"
-sysinfo = "0.33.*"
+env_logger = "0.11.*"
+sysinfo = "0.35.*"
 rust-ini = "0.21"
 
 [package.metadata.deb]

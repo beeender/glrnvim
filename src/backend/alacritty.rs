@@ -8,7 +8,7 @@ use std::{thread, time};
 use sysinfo::{Pid, Signal, System};
 use tempfile::NamedTempFile;
 extern crate log;
-use toml_edit::{value, Document, Item, Table, Value};
+use toml_edit::{value, DocumentMut, Item, Table, Value};
 
 pub const ALACRITTY_NAME: &str = "alacritty";
 
@@ -27,19 +27,19 @@ pub fn init(config: &Config) -> Result<Box<dyn Functions>, GlrnvimError> {
 }
 
 impl Alacritty {
-    fn create_base_conf(&mut self, config: &Config) -> Document {
+    fn create_base_conf(&mut self, config: &Config) -> DocumentMut {
         config.term_config_path.as_ref().map_or_else(
             {
                 || match config.load_term_conf {
                     true => Alacritty::load_alacritty_conf(None),
-                    _ => Document::new(),
+                    _ => DocumentMut::new(),
                 }
             },
             |p| Alacritty::load_alacritty_conf(Some(p.to_string())),
         )
     }
 
-    fn create_conf_file(&mut self, base_mapping: &mut Document, config: &Config) {
+    fn create_conf_file(&mut self, base_mapping: &mut DocumentMut, config: &Config) {
         let key_font = "font";
         if !base_mapping.contains_key(key_font) {
             // Try to merge the terminal settings
@@ -87,7 +87,7 @@ impl Alacritty {
     }
 
     // Load the default alacritty config
-    fn load_alacritty_conf(path: Option<String>) -> Document {
+    fn load_alacritty_conf(path: Option<String>) -> DocumentMut {
         let conf_path = path.or({
             let base_confs: [String; 0] = [];
             let pri_confs: [String; 3] = [
@@ -106,15 +106,15 @@ impl Alacritty {
             Some(p) => {
                 let content = std::fs::read_to_string(p.clone())
                     .expect(format!("Cannot load term config file: '{}'", p).as_ref());
-                match content.parse::<Document>() {
+                match content.parse::<DocumentMut>() {
                     Ok(mapping) => mapping,
                     Err(msg) => {
                         log::warn!("Cannot identify executable name from '{}'", msg);
-                        Document::new()
+                        DocumentMut::new()
                     }
                 }
             }
-            _ => Document::new(),
+            _ => DocumentMut::new(),
         }
     }
 }
@@ -209,7 +209,7 @@ mod tests {
             exe_path: PathBuf::new(),
             cfg_file: None,
         };
-        alacritty.create_conf_file(&mut Document::new(), &conf);
+        alacritty.create_conf_file(&mut DocumentMut::new(), &conf);
         let tmp_conf = alacritty.cfg_file;
         assert!(tmp_conf.is_some());
         let result = fs::read_to_string(tmp_conf.as_ref().unwrap().path());
@@ -228,7 +228,7 @@ bindings = [{ key = "Z", mods = "Control", action = "None" }]
 
     #[test]
     fn test_overwrite_alacritty_conf() {
-        let mut term_conf = Document::new();
+        let mut term_conf = DocumentMut::new();
         let mut font_mapping = Table::new();
         font_mapping.insert("size", value(42));
         term_conf.insert("font", Item::Table(font_mapping));
@@ -267,7 +267,7 @@ bindings = [{ key = "Z", mods = "Control", action = "None" }]
 
     #[test]
     fn test_not_overwrite_alacritty_conf() {
-        let mut term_conf = Document::new();
+        let mut term_conf = DocumentMut::new();
         let mut font_mapping = Table::new();
         font_mapping.insert("size", value(42));
         term_conf.insert("font", Item::Table(font_mapping));
@@ -303,7 +303,7 @@ bindings = [{ key = "Z", mods = "Control", action = "None" }]
 
     #[test]
     fn test_hex_value_serialize() {
-        let mut term_conf = Document::new();
+        let mut term_conf = DocumentMut::new();
         let mut primary = Table::new();
         let mut colors = Table::new();
         primary.insert("background", value("0x424242".to_string()));
