@@ -18,7 +18,7 @@ toml_edit = "0.21.*"
 shellexpand = "2.1.*"
 log = "0.4.*"
 env_logger = "0.10.*"
-sysinfo = "0.22.*"
+sysinfo = "0.33.*"
 rust-ini = "0.21"
 
 [package.metadata.deb]

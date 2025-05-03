@@ -1,12 +1,11 @@
 use super::Functions;
 use crate::config::Config;
 use crate::error::GlrnvimError;
-use std::ffi::OsStr;
 use std::fs;
 use std::path::Path;
 use std::path::PathBuf;
 use std::{thread, time};
-use sysinfo::{Pid, ProcessExt, Signal, System, SystemExt};
+use sysinfo::{Pid, Signal, System};
 use tempfile::NamedTempFile;
 extern crate log;
 use toml_edit::{value, Document, Item, Table, Value};
@@ -93,7 +92,7 @@ impl Alacritty {
             let base_confs: [String; 0] = [];
             let pri_confs: [String; 3] = [
                 "$XDG_CONFIG_HOME/alacritty/alacritty.toml".to_string(),
-                "$HOME/.config/alacritty/alacritty.tolm".to_string(),
+                "$HOME/.config/alacritty/alacritty.toml".to_string(),
                 "$XDG_CONFIG_DIRS/alacritty/alacritty.toml".to_string(),
             ];
             let confs = super::find_term_conf_files(&base_confs, &pri_confs);
@@ -149,7 +148,6 @@ impl Functions for Alacritty {
     fn post_start(&mut self, config: &Config, term_pid: Pid) {
         let proc_name = match Path::new(&config.nvim_exe_path)
             .file_name()
-            .and_then(OsStr::to_str)
         {
             None => {
                 log::warn!(
@@ -166,7 +164,7 @@ impl Functions for Alacritty {
         loop {
             count += 1;
             let s = System::new_all();
-            for process in s.process_by_name(proc_name) {
+            for process in s.processes_by_name(proc_name) {
                 match process.parent() {
                     None => {}
                     Some(ppid) => {
