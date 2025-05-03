@@ -146,9 +146,7 @@ impl Functions for Alacritty {
     // See https://github.com/neovim/neovim/issues/11330
     #[cfg(target_os = "linux")]
     fn post_start(&mut self, config: &Config, term_pid: Pid) {
-        let proc_name = match Path::new(&config.nvim_exe_path)
-            .file_name()
-        {
+        let proc_name = match Path::new(&config.nvim_exe_path).file_name() {
             None => {
                 log::warn!(
                     "Cannot identify executable name from '{}'",

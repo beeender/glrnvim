@@ -11,7 +11,6 @@ use std::env;
 use std::process::Command;
 use sysinfo::Pid;
 
-
 const DEFAULT_FONT_SIZE: u8 = 12;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -137,7 +136,9 @@ fn show_help() {
             conf_dir.push("glrnvim");
             conf_dir.push("config.yml");
             println!("\nConfig file: {}", conf_dir.display());
-            println!("See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example.");
+            println!(
+                "See https://github.com/beeender/glrnvim/blob/master/glrnvim.yml for example."
+            );
         }
         None => {
             println!("\nConfig file: Cannot identify the current config directory. No config file can be loaded.");
