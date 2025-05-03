@@ -3,7 +3,8 @@ CHANGES
 
 Next Release
 
-- Fix a CWD issue with wezterm backend.
+- Fix a CWD issue with wezterm backend. (#75)
+- Add [foot](https://codeberg.org/dnkl/foot) support. (#77)
 
 1.4.0
 
