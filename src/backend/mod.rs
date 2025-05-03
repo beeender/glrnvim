@@ -1,8 +1,8 @@
 mod alacritty;
+mod foot;
 mod kitty;
 mod urxvt;
 mod wezterm;
-mod foot;
 use super::config::Config;
 use crate::config::Backend;
 use crate::error::GlrnvimError;
@@ -13,8 +13,7 @@ extern crate shellexpand;
 
 pub trait Functions {
     fn create_command(&mut self, config: &Config) -> std::process::Command;
-    fn post_start(&mut self, _config: &Config, _term_pid: Pid) {
-    }
+    fn post_start(&mut self, _config: &Config, _term_pid: Pid) {}
 }
 
 #[cfg(not(target_os = "windows"))]
@@ -22,7 +21,7 @@ const COMMON_ARGS: &[&str] = &[
     "--cmd",
     "set termguicolors", // Enable 24-bits colors
     "--cmd",
-    "set title",         // Set title string
+    "set title", // Set title string
     "--cmd",
     "let g:glrnvim_gui=1",
 ];
@@ -31,7 +30,7 @@ const COMMON_ARGS: &[&str] = &[
     "\"--cmd\"",
     "\"set termguicolors\"", // Enable 24-bits colors
     "\"--cmd\"",
-    "\"set title\"",         // Set title string
+    "\"set title\"", // Set title string
     "\"--cmd\"",
     "\"let g:glrnvim_gui=1\"",
 ];
