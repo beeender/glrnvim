@@ -193,15 +193,10 @@ mod tests {
     #[test]
     fn test_create_basic_alacritty_conf() {
         let conf = config::Config {
-            fork: false,
             backend: Some(config::Backend::Alacritty),
-            term_exe_path: None,
-            term_config_path: None,
-            exe_path: None,
-            nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
             fonts: vec!["test_font".to_string()],
-            load_term_conf: false,
+            ..Default::default()
         };
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
@@ -232,15 +227,10 @@ bindings = [{ key = "Z", mods = "Control", action = "None" }]
         term_conf.insert("font", Item::Table(font_mapping));
 
         let conf = config::Config {
-            fork: false,
             backend: Some(config::Backend::Alacritty),
-            term_exe_path: None,
-            term_config_path: None,
-            exe_path: None,
-            nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
             fonts: vec!["test_font".to_string()],
-            load_term_conf: false,
+            ..Default::default()
         };
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
@@ -270,17 +260,8 @@ bindings = [{ key = "Z", mods = "Control", action = "None" }]
         font_mapping.insert("size", value(42));
         term_conf.insert("font", Item::Table(font_mapping));
 
-        let conf = config::Config {
-            fork: false,
-            backend: Some(config::Backend::Alacritty),
-            term_exe_path: None,
-            term_config_path: None,
-            exe_path: None,
-            nvim_exe_path: "nvim".to_owned(),
-            font_size: 0,
-            fonts: vec![],
-            load_term_conf: false,
-        };
+        let mut conf = config::Config::default();
+        conf.backend = Some(config::Backend::Alacritty);
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
             cfg_file: None,
@@ -309,15 +290,8 @@ bindings = [{ key = "Z", mods = "Control", action = "None" }]
         term_conf.insert("colors", Item::Table(colors));
 
         let conf = config::Config {
-            fork: false,
             backend: Some(config::Backend::Alacritty),
-            term_exe_path: None,
-            term_config_path: None,
-            exe_path: None,
-            nvim_exe_path: "nvim".to_owned(),
-            font_size: 0,
-            fonts: vec![],
-            load_term_conf: false,
+            ..Default::default()
         };
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
@@ -352,15 +326,11 @@ size = 16
         w.write_all(term_conf.as_bytes()).ok();
         w.flush().expect("");
         let conf = config::Config {
-            fork: false,
             backend: Some(config::Backend::Alacritty),
-            term_exe_path: None,
             term_config_path: Some(term_conf_file.path().to_str().unwrap().to_string()),
-            exe_path: None,
-            nvim_exe_path: "nvim".to_owned(),
             font_size: 14,
             fonts: vec!["test_font".to_string()],
-            load_term_conf: false,
+            ..Default::default()
         };
         let mut alacritty = Alacritty {
             exe_path: PathBuf::new(),
