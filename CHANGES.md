@@ -3,7 +3,7 @@ CHANGES
 
 Next Release
 
--
+- Add `omit_term_stderr` to the config to disable unnecessary backend terminal output to the stderr.
 
 1.5.0
 

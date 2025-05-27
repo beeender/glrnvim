@@ -8,7 +8,7 @@ mod error;
 
 use config::*;
 use std::env;
-use std::process::Command;
+use std::process::{Command, Stdio};
 use sysinfo::Pid;
 
 const DEFAULT_FONT_SIZE: u8 = 12;
@@ -75,7 +75,7 @@ fn parse_args() -> (Config, Vec<String>) {
         }
         None => Config::default(),
     };
-    config = config::complete(config, fork);
+    config.fork = fork;
     if !config.load_term_conf {
         // Set our default configs if user doesn't use the terminal's conf.
         if config.font_size == 0 {
@@ -159,6 +159,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     prepare_env();
     log::debug!("Start command: {:?}", command);
+    if config.should_omit_stderr() {
+        command.stderr(Stdio::null());
+    }
     let mut child = command.spawn()?;
 
     backend_functions.post_start(&config, Pid::from_u32(child.id()));
