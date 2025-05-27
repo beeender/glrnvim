@@ -33,6 +33,8 @@ pub struct Config {
     pub fonts: Vec<String>,
     #[serde(default)]
     pub font_size: u8,
+    #[serde(default)]
+    pub omit_term_stderr: bool,
 }
 
 impl Default for Config {
@@ -47,6 +49,7 @@ impl Default for Config {
             fonts: Vec::new(),
             font_size: 0,
             load_term_conf: false,
+            omit_term_stderr: false,
         }
     }
 }
@@ -83,9 +86,13 @@ pub fn parse(path: PathBuf) -> Config {
     config
 }
 
-pub fn complete(mut config: Config, fork: bool) -> Config {
-    config.fork = fork;
-    config
+impl Config {
+    pub fn should_omit_stderr(&self) -> bool {
+        if log::log_enabled!(log::Level::Debug) {
+            return false;
+        }
+        self.omit_term_stderr
+    }
 }
 
 #[cfg(test)]

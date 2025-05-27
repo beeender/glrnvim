@@ -39,3 +39,6 @@
 # when 'load_term_conf' is true.
 #term_config_path: /path/to/config.toml
 
+# Set to true to redirect the backend terminal error output to null device.
+# Avoid annoying harmless terminal error logs being printed all the time.
+#omit_term_stderr: false
