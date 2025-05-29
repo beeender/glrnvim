@@ -1,6 +1,6 @@
 [package]
 name = "glrnvim"
-version = "1.5.0"
+version = "1.6.0"
 authors = ["beeender <chenmulong@gmail.com>"]
 edition = "2024"
 description = "glrnvim combines OpenGL (possibly), Rust and NeoVIM together, to make the fastest, simplest neovim GUI."
@@ -23,7 +23,7 @@ rust-ini = "0.21"
 
 [package.metadata.deb]
 maintainer = "beeender <chenmulong@gmail.com>"
-copyright = "2019, beeender <chemulong@gmail.com>"
+copyright = "2025, beeender <chemulong@gmail.com>"
 license-file = ["LICENSE", "9"]
 depends = "$auto"
 extended-description = "glrnvim wraps nvim with your favourite terminal into a standalone, non-fancy but daily-usable neovim GUI."
