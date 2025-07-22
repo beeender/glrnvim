@@ -22,9 +22,9 @@ fn prepare_env() {}
 fn prepare_env() {
     // When starting from iTerm, these env vars could cause some display issues.
     log::debug!("unset $TERM_PROGRAM");
-    env::remove_var("TERM_PROGRAM");
+    unsafe { env::remove_var("TERM_PROGRAM") };
     log::debug!("unset $TERM_PROGRAM_VERSION");
-    env::remove_var("TERM_PROGRAM_VERSION");
+    unsafe { env::remove_var("TERM_PROGRAM_VERSION") };
 }
 
 fn check_nvim(vim_exe_path: &str) {
