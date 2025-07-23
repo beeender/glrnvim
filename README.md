@@ -1,6 +1,6 @@
 glrnvim
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 =======
@@ -111,6 +111,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LollipopFt"><img src="https://avatars.githubusercontent.com/u/62802897?v=4?s=100" width="100px;" alt="LollipopFt"/><br /><sub><b>LollipopFt</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=LollipopFt" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/robacarp"><img src="https://avatars.githubusercontent.com/u/208647?v=4?s=100" width="100px;" alt="robacarp"/><br /><sub><b>robacarp</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=robacarp" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://higuoxing.com"><img src="https://avatars.githubusercontent.com/u/21099318?v=4?s=100" width="100px;" alt="Xing Guo"/><br /><sub><b>Xing Guo</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=higuoxing" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aescling"><img src="https://avatars.githubusercontent.com/u/34298117?v=4?s=100" width="100px;" alt="cat æscling"/><br /><sub><b>cat æscling</b></sub></a><br /><a href="https://github.com/beeender/glrnvim/commits?author=aescling" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
