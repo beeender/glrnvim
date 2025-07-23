@@ -94,6 +94,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "aescling",
+      "name": "cat æscling",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34298117?v=4",
+      "profile": "https://github.com/aescling",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
