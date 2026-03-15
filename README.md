@@ -1,4 +1,7 @@
-glrnvim
+<p align="center">
+  <img src="glrnvim.svg" width="240" height="240" alt="glrnvim logo">
+</p>
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
