@@ -1,27 +1,158 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="602px" height="734px" viewBox="0 0 602 734" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <title>neovim-mark@2x</title>
-    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
-    <defs>
-        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
-            <stop stop-color="#16B0ED" stop-opacity="0.800235524" offset="0%"></stop>
-            <stop stop-color="#0F59B2" stop-opacity="0.83700023" offset="100%"></stop>
-        </linearGradient>
-        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
-            <stop stop-color="#7DB643" offset="0%"></stop>
-            <stop stop-color="#367533" offset="100%"></stop>
-        </linearGradient>
-        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
-            <stop stop-color="#88C649" stop-opacity="0.8" offset="0%"></stop>
-            <stop stop-color="#439240" stop-opacity="0.84" offset="100%"></stop>
-        </linearGradient>
-    </defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="mark-copy" sketch:type="MSLayerGroup" transform="translate(2.000000, 3.000000)">
-            <path d="M0,155.5704 L155,-1 L154.999997,727 L0,572.237919 L0,155.5704 Z" id="Left---green" fill="url(#linearGradient-1)" sketch:type="MSShapeGroup"></path>
-            <path d="M443.060403,156.982405 L600,-1 L596.818792,727 L442,572.219941 L443.060403,156.982405 Z" id="Right---blue" fill="url(#linearGradient-2)" sketch:type="MSShapeGroup" transform="translate(521.000000, 363.500000) scale(-1, 1) translate(-521.000000, -363.500000) "></path>
-            <path d="M154.986294,0 L558,615.189696 L445.224605,728 L42,114.172017 L154.986294,0 Z" id="Cross---blue" fill="url(#linearGradient-3)" sketch:type="MSShapeGroup"></path>
-            <path d="M155,283.83232 L154.786754,308 L31,124.710606 L42.4619486,113 L155,283.83232 Z" id="Shadow" fill-opacity="0.13" fill="#000000" sketch:type="MSShapeGroup"></path>
-        </g>
-    </g>
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="glrnvim.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.58935547"
+     inkscape:cx="1077.4482"
+     inkscape:cy="294.38939"
+     inkscape:window-width="3440"
+     inkscape:window-height="1410"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg12" />
+  <defs
+     id="defs8">
+    <linearGradient
+       id="termBg"
+       x1="0%"
+       y1="0%"
+       x2="0%"
+       y2="100%">
+      <stop
+         offset="0%"
+         stop-color="#1a1a1a"
+         id="stop1" />
+      <stop
+         offset="100%"
+         stop-color="#0a0a0a"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       id="nvimGreen"
+       x1="0%"
+       y1="0%"
+       x2="100%"
+       y2="100%">
+      <stop
+         offset="0%"
+         stop-color="#57A143"
+         id="stop3" />
+      <stop
+         offset="100%"
+         stop-color="#3C92D2"
+         id="stop4" />
+    </linearGradient>
+    <filter
+       id="glow"
+       x="-50%"
+       y="-50%"
+       width="200%"
+       height="200%">
+      <feGaussianBlur
+         stdDeviation="6"
+         result="coloredBlur"
+         id="feGaussianBlur4" />
+      <feMerge
+         id="feMerge5">
+        <feMergeNode
+           in="coloredBlur"
+           id="feMergeNode4" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode5" />
+      </feMerge>
+    </filter>
+    <filter
+       id="strongGlow"
+       x="-0.12922223"
+       y="-0.18"
+       width="1.2584445"
+       height="1.36">
+      <feGaussianBlur
+         stdDeviation="12"
+         result="coloredBlur"
+         id="feGaussianBlur5" />
+      <feMerge
+         id="feMerge8">
+        <feMergeNode
+           in="coloredBlur"
+           id="feMergeNode6" />
+        <feMergeNode
+           in="coloredBlur"
+           id="feMergeNode7" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode8" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect
+     x="56"
+     y="56"
+     width="400"
+     height="400"
+     rx="6"
+     ry="6"
+     fill="url(#termBg)"
+     stroke="#2a2a2a"
+     stroke-width="2"
+     id="rect8" />
+  <rect
+     x="56"
+     y="56"
+     width="400"
+     height="28"
+     rx="6"
+     ry="6"
+     fill="#252525"
+     id="rect9" />
+  <rect
+     x="56"
+     y="78"
+     width="400"
+     height="6"
+     fill="#252525"
+     id="rect10" />
+  <g
+     transform="matrix(1.3,0,0,1.3,229.60447,265.20081)"
+     filter="url(#strongGlow)"
+     id="g12">
+    <!-- Left stroke (blue) -->
+    <path
+       d="m -70,-80 h 40 V 80 h -40 z"
+       fill="#3c92d2"
+       transform="skewX(-15)"
+       id="path10" />
+    <!-- Right stroke (green) -->
+    <path
+       d="m 70,-80 h 40 V 80 H 70 Z"
+       fill="#57a143"
+       transform="skewX(-15)"
+       id="path11" />
+    <!-- Cross stroke (green) -->
+    <path
+       d="M -30,-80 70,80 H 30 L -70,-80 Z"
+       fill="#57a143"
+       transform="skewX(-15)"
+       id="path12" />
+  </g>
 </svg>
