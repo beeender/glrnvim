@@ -155,7 +155,7 @@ fonts:
     }
 
     #[test]
-    #[should_panic(expected = "No such file or directory")]
+    #[should_panic(expected = "kind: NotFound")]
     fn test_parse_non_exist_config() {
         parse(PathBuf::from("/non/exists"));
     }

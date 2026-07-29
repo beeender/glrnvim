@@ -2,9 +2,12 @@ use super::Functions;
 use crate::config::Config;
 use crate::error::GlrnvimError;
 use std::fs;
+#[cfg(target_os = "linux")]
 use std::path::Path;
 use std::path::PathBuf;
+#[cfg(target_os = "linux")]
 use std::{thread, time};
+#[cfg(target_os = "linux")]
 use sysinfo::{Pid, Signal, System};
 use tempfile::NamedTempFile;
 extern crate log;
